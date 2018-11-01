@@ -1,9 +1,9 @@
 # Site settings
-title: Liang Ke Jin
-description: Liang Ke Jin
+title: youngbug的主页
+description: youngbug
 favicon: /assets/img/avatar.JPG
 baseurl:
-url: https://liungkejin.github.io
+url: https://youngbug.github.io
 rss_url:
 
 # Build settings
