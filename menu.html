@@ -6,8 +6,9 @@ layout: blog_layout
     <section class="smenu">
         <a href="{{post.url}}">
             <span class="glyphicon glyphicon-hand-right">  </span>
-            &nbsp;&nbsp; {{post.title}} &nbsp;&nbsp;{{ post.time  | date: "%Y/%m/%d" }}
-        &nbsp;&nbsp; 
+            &nbsp;&nbsp; {{post.title}} &nbsp;&nbsp;
         </a>
+        {{ post.time  | date: "%Y/%m/%d" }}
+        &nbsp;&nbsp; 
     </section>
 {% endfor %}
