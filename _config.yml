@@ -1,7 +1,7 @@
 # Site settings
 title: youngbug的主页
 description: youngbug
-favicon: /assets/img/avatar.JPG
+favicon: /assets/img/youngbug.gif
 baseurl:
 url: https://youngbug.github.io
 rss_url:
