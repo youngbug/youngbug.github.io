@@ -12,7 +12,7 @@ excerpt_separator: "#"
 
 ## 1.BigInteger类
 Java中有现成的大数运算的`BigInteger`类，直接使用这个类进行运算即可，总结一下使用中遇到的坑。Java的大数多1bit表示符号，所以如果1024byte的N在`BigInteger`中是1025bit，最高位多了1bit符号位，所以如果用`BigInteger`中的`toByteArray()`可以获得大数的二进制补码，如果需要导出`BigInteger`中的数据，需要忽略符号位，从第二字节开始拷贝，如果从第一字节就拷贝，那么会丢失最后一字节，把符号位存下来。
-`BigInteger`类提供`modInverse`方法，可以直接求d=$e^{-1}$=mod $\phi(n)$，这样就省事多了。
+`BigInteger`类提供`modInverse`方法，可以直接求$d=e^{-1} = mod \\phi(n)$，这样就省事多了。
 
 ## 2.Cipher类
 javax.crypto.Cipher类有个getInstance()方法，参数是“算法/模式/填充方式”，因为我只有一块定长128字节数据进行RSA运算，自己进行填充和去填充,按照sun的文档中的说明，填写"RSA/None/NoPadding"，但是编译的时候报错，提示不支持，网上搜了搜，都说默认的Crypt Provider不支持NoPadding，必须是PKCS#1的填充，感觉很不靠谱啊，后来发现是在Jdk1.7还是哪个版本之后，不支持None的模式，用ECB模式就行了，之前的版本是不是支持None也没去验证。
