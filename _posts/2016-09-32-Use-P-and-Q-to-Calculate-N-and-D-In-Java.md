@@ -8,11 +8,14 @@ pulished: true
 excerpt_separator: "```"
 ---
 最近在使用Java中需要使用PQ形式的私钥进行RSA加解密运算，本来以为Java中应该很多类似的例子，发现所有的例子都是从ND形式的私钥，竟然没有人用分量P和Q计算N和D进行运算。对Java使用RSA运算不太熟，只能自己一点一点搞了。身边的Java 的仙们，好像身边都没人中国剩余定理，所以也不会遇到P和Q？不管他们了，开工了。
+
 ##1.BigInteger类
 Java中有现成的大数运算的BigInteger类，直接使用这个类进行运算即可，总结一下使用中遇到的坑。Java的大数多1bit表示符号，所以如果1024byte的N在BigInteger中是1025bit，最高位多了1bit符号位，所以如果用BigInteger中的toByteArray()可以获得大数的二进制补码，如果需要导出BigInteger中的数据，需要忽略符号位，从第二字节开始拷贝，如果从第一字节就拷贝，那么会丢失最后一字节，把符号位存下来。
 BigInteger类提供modInverse方法，可以直接求$d=e^{-1}\ \  mod\   \varphi (n) $，这样就省事多了。
+
 ##2.Cipher类
 javax.crypto.Cipher类有个getInstance()方法，参数是“算法/模式/填充方式”，因为我只有一块定长128字节数据进行RSA运算，自己进行填充和去填充,按照sun的文档中的说明，填写"RSA/None/NoPadding"，但是编译的时候报错，提示不支持，网上搜了搜，都说默认的Crypt Provider不支持NoPadding，必须是PKCS#1的填充，感觉很不靠谱啊，后来发现是在Jdk1.7还是哪个版本之后，不支持None的模式，用ECB模式就行了，之前的版本是不是支持None也没去验证。
+
 ##3.代码
 **RSACrtUtil.java**
 ```java
