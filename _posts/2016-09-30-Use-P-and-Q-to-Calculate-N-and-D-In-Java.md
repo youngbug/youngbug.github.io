@@ -5,7 +5,7 @@ time: 2016年09月30日 星期五
 author: Zhao Yang(cnrgc@163.com)
 location: 北京
 pulished: true
-excerpt_separator: "#"
+excerpt_separator: "```"
 ---
 
 最近在使用Java中需要使用PQ形式的私钥进行RSA加解密运算，本来以为Java中应该很多类似的例子，发现所有的例子都是从ND形式的私钥，竟然没有人用分量P和Q计算N和D进行运算。对Java使用RSA运算不太熟，只能自己一点一点搞了。身边的Java 的仙们，好像身边都没人中国剩余定理，所以也不会遇到P和Q？不管他们了，开工了。
