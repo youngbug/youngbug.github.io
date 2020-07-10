@@ -18,27 +18,27 @@ excerpt_separator: "#"
 
 **图1-1： 目标文件格式Object File Format**
 
-Linking View|
----- 
-ELF header|
-Program header table *optional*|
-Section 1 |
-...|
-Section n|
-...|
-...|
-Section header table|
+Linking View| 
+----| 
+ELF header| 
+Program header table *optional*| 
+Section 1 | 
+...| 
+Section n| 
+...| 
+...| 
+Section header table| 
 
-Execution View|
-----
-ELF header|
-Program header table|
-Segment 1|
+Execution View| 
+----| 
+ELF header| 
+Program header table| 
+Segment 1| 
 Segment 2|
-...|
-Section header table *optional*|
+...| 
+Section header table *optional*| 
 
-*ELF header* 位于起始位置并且保存了描述文件组织的"road map"。*Section*保存着一块object file的信息，从链接视角看：指令、数据、符号表、重定位信息等。特殊section的描述会在*segments*和程序执行视角立提到。
+*ELF header* 位于起始位置并且保存了描述文件组织的"road map"。*Section*保存着一块object file的信息，从链接视角看：指令、数据、符号表、重定位信息等。特殊section的描述会在*segments*和程序执行视角里提到。
 
 如果存在*program header table*，告诉操作系统如何创建一个进程镜像(process image)。用于构建process image(execute a program)的文件，必须有program header table。重定位文件(relocatable file)不需要。*section header table*包含了描述文件section的信息。在这section header table中，每个section都有一个入口。每个入口给出了一些信息，包括section名称，section大小等。文件在链接时使用，必须有section header。其他object file可以有也可以没有。
 
@@ -51,7 +51,7 @@ Section header table *optional*|
 
 **图1-2： 32-Bit Data Types 32比特数据类型**
 
-Name|Size|Alignment|Purpose
+Name | Size | Alignment | Purpose
 ----|----|----|----
 Elf32_Addr|4|4|Unsigned program address
 Elf32_Half|2|2|Unsigned medium integer
@@ -99,7 +99,7 @@ typedef struct
 * **e_type**   
 这个成员定义了object file的类型
 
-Name|Value|Meaning
+Name | Value | Meaning
 ----|----|----
 ET_NONE|0|No file type
 ET_REL|1|Relocatable file
@@ -114,7 +114,7 @@ ET_HIPROC|0xFFFF|Processor-specific
 * **e_machine**   
 这个成员值指出这个文件需要的架构
 
-Name|Value|Meaning
+Name | Value | Meaning
 ----|----|----
 EM_NONE|0|No machine
 EM_M32|1|AT&T WE 32100
@@ -137,4 +137,99 @@ EV_CURRENT|1|Current version
 
 * **e_entry**   
 这个成员给出系统首次传输控制使用的虚拟地址，从此开始进程。如果文件没有入口点，这个成员的值保持为0.
+
+* **e_phoff** 
+这个成员保存着program header table在文件中偏移的字节值。如果文件没有program header table，这个值保持为0。
+
+* **shoff**  
+这个成员保存着section header table在文件中偏移的字节值。如果文件没有section header table，这个值保持为0。
+
+* **e_flags**  
+这个成员保存着和文件关联的processor-specific 标志位。标志位的名字采用*ET_machine_flag*的形式。
+
+* **e_ehsize**  
+这个成员保存了ELF header大小的字节数。
+
+* **e_phentsize**  
+这个成员保存了文件的program header table中的一个入口(entry)大小的字节数。所有的入口都是一样大的。
+
+* **e_phnum**  
+这个成员保存了program header table中入口(entry)的数量。因此*e_phentsize*和*e_phnum*的乘积给出了table大小的字节数。如果一个文件没有program header table，e_phnum保存0值。
+
+* **e_shentsize**  
+这个成员保存了一个section header大小的字节数。一个section header是section header table中的一个入口(entry)。所有的入口(entry)大小是一样的。
+
+* **e_shnum**  
+这个成员保存了section header table中的入口(entry)数量。因此*e_shentsize*和*e_shnum*的乘积给出了section header table大小的字节数。如果一个文件没有section header table，e_shnum的值为0。
+
+* **e_shstrndx**  
+这个成员保存了和section name string table关联的入口(entry)的section header table index。如果文件没有section name string table，这个成员的值为SHN_UNDEF。
+
+# ELF Identification
+上面提到了ELF提供的object file框架用于支持多种处理器，多种数据编码和多种机器类型。为了支持object file家族，文件的初始字节表明了如何解释这个文件，独立于处理器，和文件的剩下的部分无关。  
+ELF header的初始字节符合**e_ident**成员。  
+**图1-4：e_ident[] Identification Indexes**  
+Name | Value | Purpose
+----|----|----
+EI_MAG0|0|File identification
+EI_MAG1|1|File identification
+EI_MAG2|2|File identification
+EI_MAG3|3|File identification
+EI_CLASS|4|File class
+EI_DATA|5|Data encoding
+ET_VERSION|6|File version
+ET_PAD|7|Start of padding bytes
+ET_NIDENT|16|Size of e_ident[]
+
+通过index访问字节，这些字节的值如下：
+
+* **EI_MAG0**到**EI_MAG3**   
+文件的前4字节保存一个magic number，识别一个文件是不是ELF object file。  
+
+Name | Value | Position
+----|----|----
+ELFMAG0|0x7F | e_ident[EI_MAG0]
+ELFMAG1|'E'| e_ident[EI_MAG1]
+ELFMAG2|'L'| e_ident[EI_MAG2]
+ELFMAG3|'F'| e_ident[EI_MAG03]
+
+* **EI_CLASS**  
+下面的字节e_ident[EI_CLASS]，识别文件的class和capacity。  
+
+Name | Value | Meaning 
+----|----|----
+ELFCLASSNONE|0|Invalid class
+ELFCLASS32|1|32-bit objects
+ELFCLASS64|2|64-bit objects
+
+* **EI_DATA**  
+字节e_ident[EI_DATA]明确了object file中process-specific数据的编码方式。下面的编码是现在定义的。  
+
+Name | Value | Meaning
+----|----|----
+ELFDATANONE|0|Invalid data encoding
+ELFDATA2LSB|1|后面定义
+ELFDATA2MSB|2|后面定义
+
+* **EI_VERSION**  
+字节e_ident[EI_VERISON]明确了ELF header版本号。现在这个值必须为EV_CURRENT。
+
+* **EI_PAD**  
+这个值用来标记e_ident中没有使用的字节。这些字节保留并且被设置为0.程序读object file的时候会忽略这些字节。
+
+**图1-5 Data Encoding** ELFDATA2LSB (Least Signifciant Bit)
+
+Value | Byte 0 | Byte 1 | Byte 2 | Byte 3
+----| ----|----|----|----|
+0x01| 01
+0x0102| 02|01
+0x01020304|04|03|02|01
+
+**图1-6 Data Encoding** ELFDATA2MSB (Most Signifciant Bit)
+
+Value | Byte 0 | Byte 1 | Byte 2 | Byte 3
+----| ----|----|----|----|
+0x01| 01
+0x0102| 01|02
+0x01020304|01|02|03|04
 
