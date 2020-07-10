@@ -169,6 +169,7 @@ EV_CURRENT|1|Current version
 上面提到了ELF提供的object file框架用于支持多种处理器，多种数据编码和多种机器类型。为了支持object file家族，文件的初始字节表明了如何解释这个文件，独立于处理器，和文件的剩下的部分无关。  
 ELF header的初始字节符合**e_ident**成员。  
 **图1-4：e_ident[] Identification Indexes**  
+
 Name | Value | Purpose
 ----|----|----
 EI_MAG0|0|File identification
@@ -233,3 +234,37 @@ Value | Byte 0 | Byte 1 | Byte 2 | Byte 3
 0x0102| 01|02
 0x01020304|01|02|03|04
 
+# Machine Information
+用于识别文件是32-bit Intel架构的e_ident，需要为如下取值。  
+
+**图1-7：32-Bit Intel Architecture Identification,** e_ident  
+
+Position | Value 
+----|----
+e_ident[EI_CLASS] | ELFCLASS32 
+e_ident[EI_DATA] | ELFDATA2LSB 
+
+处理器识别位于ELF header的e_machine成员，并且值必须为EM_386。
+ELF header的e_flag成员保存和文件相关的bit标志位。32-bit Inter架构定义没有定义标志位，所以这个成员包含0。
+
+# Sections
+一个object file的section header table可以定位文件所有的sections。section header table是一个Elf32_Shdr结构的数组。一个section header table index是这个数组的下标。ELF header的e_shoff成员给出了从文件起始位置到section header table的偏移字节数。e_shum说明了section header table包含了多少入口(entry)。e_shentsize给出了每一个入口(entry)大小的字节数。
+
+一些section header table的index是保留的。object file不能有这些特殊的index。
+
+**图1-8:Special Section Indexes**
+
+Name | Value
+----|----
+SHN_UNDEF|0
+SHN_LORESERVE|0xFF00
+SHN_LOPROC|0xFF00
+SHN_HIPROC|0xFF1F
+SHN_ABS|0xFFF1
+SHN_COMMON|0xFFF2
+SHN_HIRESERVE|0xFFFF
+
+* **SHN_UNDEF**  
+这个值标记未定义，丢失，不相关或者其他无意义的section参考。例如，一个符号"defined"相对于section编号SHN_UNDEF就是一个没有定义的符号。
+
+> **NOTE:** 尽管下标索引0是保留给未定义的值，section header table包含一个索引0的入口。那是，如果ELF heder的e_shnum成员告诉系统在section header table这个文件有6个入口，他们有索引0~5。
