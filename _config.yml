@@ -6,7 +6,7 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: I am Zhao Yang!
+title: Welcome Zhao Yang's homepage!
 name: Zhao Yang
 email: cnrgc@163.com / sxzhaoyang@gmail.com
 location: Beijing, P.R.China
@@ -82,7 +82,7 @@ analytics :
 
 
 # For about.html. Fell free to create your own!
-skill_software_keywords: [Java, C, C++, Qt, Python, MySQL, Oracle, SQLite, PL/SQL, Design Patterns]
-skill_j2ee_keywords: [Spring, Struct, Hibernet, MyBatis, JSP]
-skill_web_keywords: [HTML, CSS, JS, JQuery, Ajax, AngularJS, NodeJS, ExpressJS, MongoDB, Redis, PHP, Symfony, Boostrap]
-skill_mobile_app_keywords: [Android, Sketch UI Desgin]
+skill_software_keywords: [C, C++, Java, Python, MySQL, Visual BASIC, JavaScript]
+skill_j2ee_keywords: [Spring Boot, MyBatis]
+skill_web_keywords: [HTML, CSS, JS, vue, axios, NodeJS, Redis]
+skill_mobile_app_keywords: [Android]
