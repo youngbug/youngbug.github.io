@@ -1,10 +1,12 @@
 ---
-layout: post_layout
+layout: post
 title: JAVA中使用P和Q分量计算N和D进行RSA运算
 time: 2016年09月30日 星期五
 author: Zhao Yang(cnrgc@163.com)
 location: 北京
 pulished: true
+category: 密码学
+tags: cryptography
 excerpt_separator: ""
 ---
 
