@@ -4,7 +4,7 @@
 
         <h2>About ME</h2>
 
-        <p>I love coding. I like animal. I want to have four babies, one cat, one dog and two sheep. I would like to be a CTO in the future.</p>
+        <p>智能卡工程，商用密码产品从业人员，抠腚谋生。红十字志愿者，铁路爱好者，业余无线电爱好者，地理爱好者，持证法律爱好者，证件收藏爱好者。已婚已育。</p>
 
         <h2>Contact</h2>
 
@@ -22,7 +22,7 @@
         {% if site.skill_program_language_keywords %}
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Program Language Keywords</h3>
+                <h3 class="panel-title">Program Language 开发语言</h3>
             </div>
             <div class="panel-body">
                 {% for keyword in site.skill_program_language_keywords %}
@@ -48,7 +48,7 @@
         {% if site.skill_cryptography_keywords %}
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Cryptographic Algorithm Keywords</h3>
+                <h3 class="panel-title">Cryptographic Algorithm 密码算法</h3>
             </div>
             <div class="panel-body">
                 {% for keyword in site.skill_cryptography_keywords %}
@@ -61,10 +61,23 @@
         {% if site.skill_smart_card_keywords %}
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Smart Card Keywords</h3>
+                <h3 class="panel-title">Smart Card 智能卡</h3>
             </div>
             <div class="panel-body">
                 {% for keyword in site.skill_smart_card_keywords %}
+                <button class="btn btn-default" type="button">{{ keyword }}</button>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if site.skill_certificate_keywords %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Certificate 资格证书</h3>
+            </div>
+            <div class="panel-body">
+                {% for keyword in site.skill_certificate_keywords %}
                 <button class="btn btn-default" type="button">{{ keyword }}</button>
                 {% endfor %}
             </div>

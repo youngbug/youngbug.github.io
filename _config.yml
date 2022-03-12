@@ -92,3 +92,4 @@ skill_program_language_keywords: [C, C++, Java, Python, Pascal/Delphi, BASIC, Ja
 skill_it_keywords: [Flask, MyBatis, HTML, CSS, Vue.js, axios, Node.js, Redis,MySQL]
 skill_cryptography_keywords: [RSA/ECC,AES,3DES,SHA,HMAC,国密SM2/SM3/SM4,OTP,X.509,ASN.1,SSL/TLS,PKI/CA]
 skill_smart_card_keywords: [PKCS#11, USB Key, FIDO U2F/UAF, EMV/PBOC, ICAO Doc9303/ePassport, Java Card, Global Platform,ISO/IEC 7816, ISO/IEC 14443,OpenPGP]
+skill_certificate_keywords: [法律职业资格]
