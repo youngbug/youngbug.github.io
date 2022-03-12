@@ -88,7 +88,7 @@ analytics :
 
 
 # For about.html. Fell free to create your own!
-skill_software_keywords: [C, C++, Java, Python, MySQL, Visual BASIC, JavaScript]
-skill_j2ee_keywords: [Spring Boot, MyBatis]
-skill_web_keywords: [HTML, CSS, JS, vue, axios, NodeJS, Redis]
-skill_mobile_app_keywords: [Android]
+skill_program_language_keywords: [C, C++, Java, Python, MySQL, Visual BASIC, JavaScript]
+skill_it_keywords: [flask, MyBatis, HTML, CSS, JS, vue, axios, NodeJS, Redis]
+skill_cryptography_keywords: [RSA/ECC,AES,3DES,SHA,HMAC,国密SM2/SM3/SM4,SSL/TLS,PKI/CA]
+skill_smart_card_keywords: [PKCS#11, USB Key, FIDO U2F/UAF, EMV/PBOC, ICAO Doc9303/ePassport, Java Card, Global Platform,ISO/IEC 7816, ISO/IEC 14443]
