@@ -14,7 +14,7 @@ company: FEITIAN Technologies
 company_url: https://www.ftsafe.com/
 github_url: https://github.com/youngbug
 description: This is Zhao Yang's homepage
-favicon: favicon.png # Image must be in assets/images
+favicon: youngbug.gif # Image must be in assets/images
 
 url: http://youngbug.github.io # the base hostname & protocol for your site
 
