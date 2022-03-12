@@ -9,6 +9,10 @@
                 {% if page.date %}
                 <span class="octicon octicon-calendar"></span> {{ page.date | date: "%Y/%m/%d" }}
                 {% endif %}
+                {% if page.location %}
+                    <span class="octicon octicon-location"></span>
+                    {{ page.location }}
+                {% endif %}
             </span>
         </div>
     </div>
