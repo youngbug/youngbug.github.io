@@ -7,10 +7,12 @@ location: 北京
 pulished: true
 category: Cryptography
 tags: [cryptography, algorithm]
-excerpt_separator: ""
+excerpt_separator:  <!--more-->
 ---
 
 这篇讲一下如何使用[中国剩余定理CRT](https://www.jianshu.com/p/8ebccf708c40)来对RSA加密运算进行加速。
+
+ <!--more-->
 
 ## RSA运算
 当我们使用RSA私钥(n,d)对密文c进行解密(或者计算数字签名时)，我们需要计算模幂$m=c^d mod \ n$。私钥指数$d$并不像公钥指数$e$那样方便。一个k比特的模n，对应的私钥指数d差不多跟它一样长。计算的工作量同长度k成正比，所以对于RSA私钥的运算，有更多的计算量。

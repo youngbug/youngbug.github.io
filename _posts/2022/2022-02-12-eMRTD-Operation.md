@@ -7,13 +7,15 @@ location: 北京
 pulished: true
 category: SmartCard
 tags: [cryptography, smartcard]
-excerpt_separator: ""
+excerpt_separator:  <!--more-->
 ---
 
 电子护照eMRTDs定义在ICAO Doc9303号文件《机读旅行证件》（Machine Readable Travel Documents）的第11部分**机读旅行证件安全机制(Security Mechanisms for MRTDS)**中。
 
 我们常见的出入境证件各国的电子护照，卡片式的港澳通行证，还有一些国家地区的电子身份证都是按照eMRTDs的标准实现的。
 
+ <!--more-->
+ 
 # 保护电子数据
 
 访问电子护照包括以下步骤

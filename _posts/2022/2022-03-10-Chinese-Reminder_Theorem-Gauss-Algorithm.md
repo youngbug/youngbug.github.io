@@ -7,10 +7,12 @@ location: 北京
 pulished: true
 category: Cryptography
 tags: [cryptography, algorithm]
-excerpt_separator: ""
+excerpt_separator:  <!--more-->
 ---
 
 这篇讨论一下中国剩余定理(Chinese Remainder Theorem),高斯算法(Gauss's algorithm)解决同步线性同余(simultaneous linear congruences)的问题、简单的方法去解决小模数(small moduli)同余、RSA低加密指数广播攻击的原理(theorem to break the RSA algorithm when someone sends the same encrypted message to three recipients using the same exponent of e=3，又叫Johan Hastad广播攻击)
+
+ <!--more-->
 
 ## 中国剩余定理 The Chinese Theorem
 
