@@ -5,6 +5,8 @@ time: 2021年10月14日 星期四
 author: Zhao Yang(cnrgc@163.com)
 location: 北京
 pulished: true
+category: Cryptography
+tags: [cryptography, algorithm]
 excerpt_separator: "#"
 ---
 在对数据进行加解密,签名,计算MAC的时候,有时需要对数据进行填充,填充的方法主要分为两大类,一种是比特填充(Bit Padding),填充时以比特为最小单位进行填充,另一种是字节填充(Byte Padding),填充时以字节为最小单位进行填充.当然有时候我们按字节处理数据时,一些比特填充和字节填充的效果是一样,比如ISO/IEC 9797-1 Padding Method 2和ISO/IEC 7816-4,数据如果最小处理单位都是字节的话,填充的效果其实是一样的.

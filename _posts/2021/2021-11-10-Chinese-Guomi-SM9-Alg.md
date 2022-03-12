@@ -5,6 +5,8 @@ time: 2021年11月10日 星期三
 author: Zhao Yang(cnrgc@163.com)
 location: 北京
 pulished: true
+category: Cryptography
+tags: [cryptography, algorithm]
 excerpt_separator: ""
 ---
 国密SM9标识密码算法推出好多年了，只是大概看过一些介绍，从来没有仔细研究，现在看到的频率越来越多，决定对照规范好好学习一下。国密SM9标识密码算法由国密局的密码行业标准GM/T 0044-2016《SM9标识密码算法》公布，这个标准共分五个部分：

@@ -5,6 +5,8 @@ author: Zhao Yang(cnrgc@163.com)
 time: 2018年04月25日 星期三
 location: 北京
 pulished: true
+category: Cryptography
+tags: [cryptography,c]
 excerpt_separator: "#"
 ---
 

@@ -5,6 +5,8 @@ time: 2022年2月12日 星期六
 author: Zhao Yang(cnrgc@163.com)
 location: 北京
 pulished: true
+category: SmartCard
+tags: [cryptography, smartcard]
 excerpt_separator: ""
 ---
 

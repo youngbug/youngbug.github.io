@@ -5,6 +5,8 @@ author: Zhao Yang(cnrgc@163.com)
 time: 2020年07月10日 星期五
 location: 北京
 pulished: true
+category: OS
+tags: [operationsystem,reverse,linux]
 excerpt_separator: "#"
 ---
 这一部分描述了iABI object文件格式，被称为ELF（Exectable and Linking Format）。Object文件有三种主要类型：
