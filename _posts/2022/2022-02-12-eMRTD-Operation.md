@@ -1,5 +1,5 @@
 ---
-layout: post_layout
+layout: post
 title: eMRTD电子机读旅行证件阅读操作
 time: 2022年2月12日 星期六
 author: Zhao Yang(cnrgc@163.com)

@@ -1,5 +1,5 @@
 ---
-layout: post_layout
+layout: post
 title: 基于mbedTLS算法库实现国密SM2签名和验签算法
 author: Zhao Yang(cnrgc@163.com)
 time: 2018年04月25日 星期三

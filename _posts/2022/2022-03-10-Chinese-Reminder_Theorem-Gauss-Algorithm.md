@@ -1,5 +1,5 @@
 ---
-layout: post_layout
+layout: post
 title: 中国剩余定理CRT、高斯算法和RSA低加密指数广播攻击
 time: 2022年3月10日 星期四
 author: Zhao Yang(cnrgc@163.com)

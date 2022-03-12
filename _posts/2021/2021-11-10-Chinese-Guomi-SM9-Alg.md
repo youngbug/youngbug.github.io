@@ -1,5 +1,5 @@
 ---
-layout: post_layout
+layout: post
 title: 国密SM9标识密码算法
 time: 2021年11月10日 星期三
 author: Zhao Yang(cnrgc@163.com)

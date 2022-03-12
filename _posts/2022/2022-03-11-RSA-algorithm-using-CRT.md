@@ -1,5 +1,5 @@
 ---
-layout: post_layout
+layout: post
 title: 使用中国剩余定理CRT对RSA运算进行加速
 time: 2022年3月10日 星期四
 author: Zhao Yang(cnrgc@163.com)

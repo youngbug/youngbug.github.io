@@ -1,5 +1,5 @@
 ---
-layout: post_layout
+layout: post
 title: ELF格式学习笔记 1.Object File
 author: Zhao Yang(cnrgc@163.com)
 time: 2020年07月10日 星期五

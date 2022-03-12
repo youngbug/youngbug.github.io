@@ -1,5 +1,5 @@
 ---
-layout: post_layout
+layout: post
 title: 加密算法中的填充方法
 time: 2021年10月14日 星期四
 author: Zhao Yang(cnrgc@163.com)
