@@ -48,8 +48,8 @@ kramdown:
   input: GFM
   enable_coderay: true
 
-# Disque
-disque: httpyoungbuggithubio.disqus.com
+# Disque 关闭掉
+# disque: httpyoungbuggithubio.disqus.com
 
 # Pagination
 paginate: 10
