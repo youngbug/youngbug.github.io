@@ -13,6 +13,8 @@ excerpt_separator:  <!--more-->
 
 FIDO（Fast IDentity Online）联盟成立于2012年，FIDO联盟通过定义出一套开放、可扩展、可协同的技术规范，来改变现有在线认证方式，减少认证用户时对密码（password）的依赖。FIDO有两套规范:U2F和UAF。
 
+<!--more-->
+
 ## 无密码的UAF（Universal Authentication Framework）
 
 - 用户携带含有UAF的客户设备
