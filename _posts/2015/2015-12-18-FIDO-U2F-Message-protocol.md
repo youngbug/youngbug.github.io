@@ -30,6 +30,7 @@ CLA INS P1 P2 LC1 LC2 LC3 <request-data>
 
 ### 2.1注册消息 U2F_REGISTER
 
+![img](/assets/blog_image/2015/20151218001.png)
 
 注册消息是需要使用U2F认证的网站在第一使用时，需要注册U2F设备的一个操作，注册请求消息有两部分，如上图所示：
 
@@ -42,6 +43,7 @@ application parameter[32 bytes]，application parameter是请求注册的应用i
 
 如果注册成功，U2F令牌会创建一个新的密钥对。需要注意的是U2F令牌在返回注册成功的响应消息之前，需要用户确认（一般是带触点按键的，按下按键或者触点，没有按键的一般是拔插一下设备），否则令牌应该返回错误码test-of-user-presence-required。
 
+![img](/assets/blog_image/2015/20151218002.png)
 
 如果注册成功，返回的响应消息格式如上图所示。
 
@@ -66,6 +68,7 @@ signature ECDSA签名，签名的数据为0x00,application parameter, challenge 
 
 ### 3.1 认证请求消息 U2F_AUTHENTICATE
 
+![img](/assets/blog_image/2015/20151218003.png)
 
 这个消息是U2F令牌进行认证的指令，FIDO客户端首先连接依赖方获得一个挑战值（随机数），然后构造认证请求报文下发到U2F令牌中，认证请求报文有下面5部分：
 
@@ -90,6 +93,7 @@ U2F令牌如果发现key handle不是自己创建的，直接Bad Key Handle错�
 
 如果认证成功，返回响应如下
 
+![img](/assets/blog_image/2015/20151218004.png)
 
 U2F令牌在处理完认证请求消息后，返回上面的消息。
 
