@@ -20,11 +20,11 @@ U2F协议是基于请求-响应方案的，当请求者发送一个请求消息�
 
 请求消息封包的格式如下：
 
-CLA INS P1 P2 LC1 LC2 LC3 <request-data>
+CLA INS P1 P2 LC1 LC2 LC3 &lt;request-data&gt;
 
 响应消息的格式如下：
 
-<request-data> SW1 SW2
+&lt;request-data&gt; SW1 SW2
 
 ## 2.注册消息
 
@@ -47,17 +47,17 @@ application parameter[32 bytes]，application parameter是请求注册的应用i
 
 如果注册成功，返回的响应消息格式如上图所示。
 
-reserved byte[1字节] 保留字节永远是0x05
+- **reserved byte** [1字节] 保留字节永远是0x05
 
-user public key[65bytes] 椭圆曲线公钥
+- **user public key** [65bytes] 椭圆曲线公钥
 
-key handle length byte[1byte]  key handle的长度
+- **key handle length byte** [1byte]  key handle的长度
 
-key handle [长度根据上面handle lenght确定] U2F令牌用来区分产生的密钥对的。
+- **key handle** [长度根据上面handle lenght确定] U2F令牌用来区分产生的密钥对的。
 
-attestation certificate[变长] X.509 DER格式的证书
+- **attestation certificate** [变长] X.509 DER格式的证书
 
-signature ECDSA签名，签名的数据为0x00,application parameter, challenge parameter,key handle,user public key
+- **signature** ECDSA签名，签名的数据为0x00,application parameter, challenge parameter,key handle,user public key
 
 签名依赖方可以使用attestation certificate中的公钥进行验证。依赖方也应该验证attestation certificate是可信的CA颁发的。
 
