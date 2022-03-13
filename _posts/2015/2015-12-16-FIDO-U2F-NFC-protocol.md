@@ -42,3 +42,23 @@ U2F NFC协议不需要对消息做任何额外的封包操作（比如USB HID协
 如果请求指令不是扩展长度，认证设备的应答必须使用ISO7816-4 APDU链，比如：
 
 ![img](/assets/blog_image/2015/20151216001.jpg)
+
+## 4.Applet选择
+
+FIDO客户端通过NFC与认证设备进行认证/注册操作，每次都需要从选择applet指令开始。选择之后的指令就参考U2F Raw Message中的定义即可。
+
+FIDI U2F的AID由RID+AC+AX组成
+
+|域	|值|
+|-|-|
+|RID	|0xA000000647|
+|AC	|0x2F|
+|AX	|0x0001|
+所以通过FIDO U2F AID来选择applet的指令是:
+**00 A4 04 00 08 A0000006472F0001**
+
+FIDO认证设备对选择applet的命令成功的响应为版本信息“U2F_V2”,选择applet成功的响应为：
+
+**0x5532465F56329000**
+
+完成选择applet，剩下的就参考U2F应用层的指令进行即可，下一篇真的写U2F Raw Message了。
