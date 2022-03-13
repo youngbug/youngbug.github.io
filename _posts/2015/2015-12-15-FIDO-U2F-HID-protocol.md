@@ -104,7 +104,7 @@ typedef struct {
 
 还是要明确一下，下面介绍的是U2FHID协议中的命令，不是U2F应用层的命令，U2F应用层的命令在U2F Raw Message中定义，并使用U2F_MSG命令发送。
 
-### 1. U2FHID_MSG
+### 1.U2FHID_MSG
 
 这个指令是用来发送U2F应用层消息的到FIDO设备的指令，数据域data中的值就是U2F的应用层指令。
 
