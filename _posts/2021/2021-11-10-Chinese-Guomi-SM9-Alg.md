@@ -7,7 +7,7 @@ location: 北京
 pulished: true
 category: Cryptography
 tags: [cryptography, algorithm]
-excerpt_separator: ""
+excerpt_separator: <!--more-->
 ---
 国密SM9标识密码算法推出好多年了，只是大概看过一些介绍，从来没有仔细研究，现在看到的频率越来越多，决定对照规范好好学习一下。国密SM9标识密码算法由国密局的密码行业标准GM/T 0044-2016《SM9标识密码算法》公布，这个标准共分五个部分：
 
@@ -18,6 +18,8 @@ excerpt_separator: ""
 * 第5部分：参数定义
 
 >Adi Shamir(RSA中的S)在1984年提出了标识密码（Identity-Based Cryptography）的概念，在标识密码系统中，用户的私钥由密钥生成中心（KGC）根据主密钥和用户标识计算得出，用户的公钥由用户标识唯一确定，从而不需要第三方保证其公钥的真实性。与基于证书的公钥密码系统相比，标识密码系统中的密钥股那里环节可以得到适当简化
+
+<!--more-->
 
 # 定义
 

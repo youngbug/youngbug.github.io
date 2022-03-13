@@ -7,12 +7,14 @@ location: 北京
 pulished: true
 category: OS
 tags: [operationsystem,reverse,linux]
-excerpt_separator: "#"
+excerpt_separator: <!--more-->
 ---
 这一部分描述了iABI object文件格式，被称为ELF（Exectable and Linking Format）。Object文件有三种主要类型：
 * *重定位文件 relocatable file*中保存了代码和数据，用于和其他的目标文件链接来创建一个可执行文件或者共享目标文件。
 * *可执行文件 executable file*保存用于执行的程序；该文件指出了*exec(BA_OS)*如何创建程序进程镜像(program's process imaging)。
 * *共享目标文件 shared oject file*保存了代码和数据，用于链接再两个context中。第一，链接编辑器[参见ld(SD_CMD)]可以把它和其他重定位(relocatable)和共享目标文件(shared object file)处理创建成为另一个目标文件。第二，动态链接器组合它、其他可执行文件和其他共享目标文件来创建一个进程镜像(process image)。
+
+<!--more-->
 
 # 文件格式 File Format
 目标文件参与了程序的链接(构建一个程序)和程序的执行。为了方便和效率，目标文件(object file)格式提供了平行的视角。图1-1展示了目标文件(object file)的组织形式。

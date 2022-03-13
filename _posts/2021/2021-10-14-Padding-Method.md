@@ -7,12 +7,14 @@ location: 北京
 pulished: true
 category: Cryptography
 tags: [cryptography, algorithm]
-excerpt_separator: "#"
+excerpt_separator: <!--more-->
 ---
 在对数据进行加解密,签名,计算MAC的时候,有时需要对数据进行填充,填充的方法主要分为两大类,一种是比特填充(Bit Padding),填充时以比特为最小单位进行填充,另一种是字节填充(Byte Padding),填充时以字节为最小单位进行填充.当然有时候我们按字节处理数据时,一些比特填充和字节填充的效果是一样,比如ISO/IEC 9797-1 Padding Method 2和ISO/IEC 7816-4,数据如果最小处理单位都是字节的话,填充的效果其实是一样的.
 PKCS #1中定义的RSA算法用的Padding方法,这里先不说.
 
 近期整理了一下加密算法中常用的填充方法,整理如下.
+
+<!--more-->
 
 ## 1.ISO/IEC 9797-1 Padding Method 1 (Zero Padding)
 填充方法定义在ISO/IEC 9797-1标准MAC算法第二步填充方法中.

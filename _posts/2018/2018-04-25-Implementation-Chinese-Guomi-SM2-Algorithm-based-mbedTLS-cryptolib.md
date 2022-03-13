@@ -7,10 +7,12 @@ location: 北京
 pulished: true
 category: Cryptography
 tags: [cryptography,c]
-excerpt_separator: "#"
+excerpt_separator: <!--more-->
 ---
 
 网上有大量的基于OpenSSL实现的国密算法库，比如著名的GmSSL,可以直接拿来用。我自己常用的是mbedTLS的算法库，比较小巧简单，在mbedTLS的大数算法的基础上实现了国密SM2的签名和验签算法。在基于mbedTLS实现SM2签名和验签算法的过程中走过一些弯路，现在把实现的过程记录下来备忘。
+
+<!--more-->
 
 国密SM2算法也是基于椭圆曲线公钥算法，椭圆曲线上的运算都是和国际算法一样的，国密SM2规范中给出了推荐曲线，所以首先需要加载国密推荐参数。
 

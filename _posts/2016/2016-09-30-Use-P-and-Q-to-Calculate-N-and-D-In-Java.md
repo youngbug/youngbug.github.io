@@ -7,10 +7,12 @@ location: 北京
 pulished: true
 category: Cryptography
 tags: [cryptography,java]
-excerpt_separator: ""
+excerpt_separator: <!--more-->
 ---
 
 最近在使用Java中需要使用PQ形式的私钥进行RSA加解密运算，本来以为Java中应该很多类似的例子，发现所有的例子都是从ND形式的私钥，竟然没有人用分量P和Q计算N和D进行运算。对Java使用RSA运算不太熟，只能自己一点一点搞了。身边的Java 的仙们，好像身边都没人中国剩余定理，所以也不会遇到P和Q？不管他们了，开工了。
+
+<!--more-->
 
 ## 1.BigInteger类
 Java中有现成的大数运算的BigInteger类，直接使用这个类进行运算即可，总结一下使用中遇到的坑。Java的大数多1bit表示符号，所以如果1024byte的N在BigInteger中是1025bit，最高位多了1bit符号位，所以如果用BigInteger中的toByteArray()可以获得大数的二进制补码，如果需要导出BigInteger中的数据，需要忽略符号位，从第二字节开始拷贝，如果从第一字节就拷贝，那么会丢失最后一字节，把符号位存下来。
