@@ -1,6 +1,6 @@
 ---
 layout: post
-title: [FIDO]U2F设备的NFC协议
+title: FIDO U2F设备的NFC协议
 time: 2015年12月16日 星期三
 author: Zhao Yang(cnrgc@163.com)
 location: 北京
