@@ -1,6 +1,6 @@
 ---
 layout: post
-title: [FIDO]U2F HID协议
+title: FIDO U2F设备的HID协议
 time: 2015年12月15日 星期二
 author: Zhao Yang(cnrgc@163.com)
 location: 北京
