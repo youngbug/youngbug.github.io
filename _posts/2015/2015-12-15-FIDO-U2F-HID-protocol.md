@@ -6,7 +6,7 @@ author: Zhao Yang(cnrgc@163.com)
 location: 北京
 pulished: true
 category: SmartCard
-tags: [cryptography, smartcard,fido,u2f,hid]
+tags: [cryptography, smartcard, fido, u2f, hid]
 excerpt_separator:  <!--more-->
 ---
 # FIDO概述
