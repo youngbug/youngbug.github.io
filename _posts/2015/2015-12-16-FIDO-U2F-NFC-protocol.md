@@ -14,6 +14,8 @@ excerpt_separator:  <!--more-->
 
 FIDO U2F NFC的协议其实非常简单，就是定义了一下FIDO U2F的AID和APDU的规范。
 
+<!--more-->
+
 ## 1.协议简介
 
 FIDO客户端和认证设备之间通过NFC进行通讯，过程如下：
@@ -38,3 +40,5 @@ U2F NFC协议不需要对消息做任何额外的封包操作（比如USB HID协
 
 如果请求指令是扩展长度，认证设备的应答必须使用扩展APDU格式
 如果请求指令不是扩展长度，认证设备的应答必须使用ISO7816-4 APDU链，比如：
+
+![img](/assets/blog_image/2015/20151216001.jpg)
