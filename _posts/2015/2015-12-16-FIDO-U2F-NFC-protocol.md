@@ -51,10 +51,12 @@ FIDI U2F的AID由RID+AC+AX组成
 
 |域	|值|
 |-|-|
-|RID	|0xA000000647|
+|RID|0xA000000647|
 |AC	|0x2F|
 |AX	|0x0001|
+
 所以通过FIDO U2F AID来选择applet的指令是:
+
 **00 A4 04 00 08 A0000006472F0001**
 
 FIDO认证设备对选择applet的命令成功的响应为版本信息“U2F_V2”,选择applet成功的响应为：
