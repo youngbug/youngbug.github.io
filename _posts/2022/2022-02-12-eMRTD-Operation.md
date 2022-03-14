@@ -229,6 +229,7 @@ eMRTD的签发者选择特定算法。查验系统必须支持下列所有算法
 关于DH的PACE，必须使用Doc 9303 part.11 9.6中和下表的响应算法和格式。
 
 **DH的算法和格式**
+
 |OID|Mapping|Sym.Cipher|Key-length|Secure Messaging|Auth.Token|
 |---|---|---|---|---|---|
 |id-PACE-DH-GM-3DES-CBC-CBC|Generic|3DES|112|CBC / CBC|CBC|
@@ -244,7 +245,9 @@ eMRTD的签发者选择特定算法。查验系统必须支持下列所有算法
 
 关于ECDH下的PACE，必须使用Doc 9303 Part.11 9.6和下表的算法和格式。
 应仅使用带有未压缩点的素数曲线。应该使用Doc 9303 Part.11 9。5.1中描述的标准化域参数。
+
 **ECDH的算法和格式**
+
 |OID|Mapping|Sym.Cipher|Key-length|Secure Messaging|Auth.Token|
 |---|---|---|---|---|---|
 |id-PACE-ECDH-GM-3DES-CBC-CBC|Generic|3DES|112|CBC / CBC|CBC|
