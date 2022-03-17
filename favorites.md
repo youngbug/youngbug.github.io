@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Bookmarks
-subtitle: <span class="mega-octicon octicon-repo"></span>&nbsp;&nbsp; 记录有用的开源项目、工具，还有我自己推荐的图书
+title: Favorites
+subtitle: <span class="mega-octicon octicon-repo"></span>&nbsp;&nbsp; 图书、网站、工具、玩具，我觉得有用的或者好玩的一切东西。
 menu: Bookmark
 ---
 

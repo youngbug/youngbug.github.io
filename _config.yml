@@ -64,16 +64,18 @@ navs:
     label: Home
 
   -
-    href: /open-source
-    label: My-Project
+    #href: /open-source
+    #label: My-Project
+    href: /footprints
+    label: Footprints
 
   -
     href: /blog
     label: Blog
 
   -
-    href: /bookmark
-    label: Bookmark
+    href: /favorites
+    label: Favorites
 
   -
     href: /about
