@@ -15,3 +15,5 @@ menu: Bookmark
 - [刑法学讲义](https://e.jd.com/30646492.html?ebook=1) - 通过法考后收藏的罗翔著作之一，里面的很多话题都曾经在厚大的刑法课中反复提到，强烈推荐。
 - [国际法(第三版)](https://item.jd.com/11780103.html) - 白桂梅著，北京大学出版社出版的国际法教程，之前听网课老师推荐的，很系统的讲了国际法，扩大了知识面。
 - [General Data Protection Regulation](https://gdpr-info.eu) - 欧盟GDPR的官方法律文本，作为法律和信息安全都沾边的人，必看。
+
+{% include comments.html %}
