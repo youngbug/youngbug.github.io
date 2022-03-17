@@ -9,3 +9,4 @@ css: ['about.css', 'sidebar-popular-repo.css', '../../bower_components/flag-icon
 ---
 
 {% include about.html %}
+{% include comments.html %}
