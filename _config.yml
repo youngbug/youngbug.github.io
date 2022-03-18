@@ -25,7 +25,7 @@ favicon: youngbug.gif # Image must be in assets/images
 url: http://youngbug.github.io # the base hostname & protocol for your site
 
 ##issue评论
-comments: true
+comment: true
 ## Gem
 gems:
   - jekyll-paginate
