@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: My Footprints
 subtitle: <span class="mega-octicon octicon-repo"></span>&nbsp;&nbsp; 我卯过的一切。
 menu: footprints
