@@ -9,7 +9,7 @@ tags: [cryptography, smartcard, bitcoin]
 excerpt_separator:  <!--more-->
 ---
 
-比特币钱包涉及钱包程序和钱包文件。钱包程序创建公钥来支付比特币(satoshis)，并使用对应的私钥来花掉比特币。钱包文件保存私钥和其他与钱包程序相关的交易信息(可选)。
+比特币钱包涉及钱包程序和钱包文件。钱包程序创建公钥来接受比特币(satoshis)付款，并使用对应的私钥来花掉比特币。钱包文件保存私钥和其他与钱包程序相关的交易信息(可选)。
 
 ## 钱包程序 Wallet Programs
 
@@ -194,13 +194,15 @@ HD协议使用一个单一的根种子和无关联的确定代际(**unlinkable d
 - 父chain code是256 bits看起来随机的数据；
 - 索引index是程序指定的32-bit整数。
 
-在上图所示的标准形式中，父chain code、父公钥和索引index被输入到单向哈希HMAC-SHA512中，生成确定代际但是看起来随机(**determistically-generated-but-seemingly-random**)的数据。哈希输出右边的看起来随机(**seemingly-random**)256 bits数据被用来作为新的子chain code。在哈希输入的左边，看起来随机(**seemingly-random**)256 bits被当作一个整数和父私钥或者父公钥组合，来创建子私钥或者子公钥：
+在上图所示的标准形式中，父chain code、父公钥和索引index被输入到单向哈希HMAC-SHA512中，生成确定代际但是看起来随机(**determistically-generated-but-seemingly-random**)的512 bits数据。哈希输出总共512 bits，右边的256 bits(低256 bits)数据被用来作为新的子chain code。哈希输出的左边256 bits被当作一个整数和父私钥或者父公钥组合(父私钥和哈希输出的高256bits椭圆曲线上做加法模G运算)，来创建子私钥或者子公钥：
 
 ```
 child_private_key == (parent_private_key + lefthand_hash_output) % G
 child_public_key == point( (parent_private_key + lefthand_hash_output) % G )
 child_public_key == point(child_private_key) == parent_public_key + point(lefthand_hash_output)
 ```
+
+> **父chain code、父公钥、索引index计算HMAC-SHA512的过程如下：父公钥(256bits)|子密钥的index(32bits)，拼接，公钥在高位索引在地位，合并后的字节序是大端，对合并后的数据进行HMAC-SHA512运算，父chain code作为哈希密钥。**
 
 > **可以看出来，父私钥和对应代际的chain code可以算出子私钥，然后用point()和子私钥可以算出子公钥，还可以用子公钥和point(父chain code)算出子公钥，这样也可以在不需要私钥的情况下，只知道某一代际的公钥和对应代际的chain code就可以算出下一代的公钥。**
 
@@ -213,6 +215,8 @@ child_public_key == point(child_private_key) == parent_public_key + point(leftha
 根种子(**root seed**)是由123 bits、256 bits或者512 bits的随机数生成的。这个根种子，最少128 bits是需要用户备份的唯一数据，将来用于通过特定的钱包和设置来分散所有的密钥。
 
 根种子通过哈希来创建512 bits看起来随机的数据，通过这些数据来创建主私钥和主chain code(合在一起称作主扩展密钥)。主公钥通过主私钥使用**point()**计算得出，主公钥和主chain code合在一起称作主扩展公钥。主扩展密钥和其他扩展密钥在功能上等效，只是因为它位于最上层的位置，所以才显得不同。
+
+*根种子的哈希后512 bits的输出，左边256 bits作为主私钥，右边256bits作为主chain code*
 
 ## 强化密钥 Hardened Keys
 
@@ -227,6 +231,8 @@ child_public_key == point(child_private_key) == parent_public_key + point(leftha
 ![img](/assets/blog_image/2022/20220319003-en-hd-private-parent-to-private-child.svg)
 
 上面的强化公示将索引index、父chain code和父私钥组合在一起用来创建产生子chain code和子私钥的数据。这个公示让在不知道父私钥的情况下不能创建子公钥。换句话说，父扩展公钥不能创建强化子公钥。
+
+> **强化密钥生成过程，在父私钥前面补一个0x00字节，父私钥和索引index拼接，私钥在高位，索引在低位，字节序为大端。对拼接后的数据进行HMAC-SHA512运算，哈希密钥是父chain code，父私钥和哈希的高256 bits做椭圆曲线上的加法模运算生成子私钥，低256 bits是子chain code。如果ECC模运算结果出现0，那么索引值递增，然后再次计算密钥。子公钥可以通过子私钥计算出来。**
 
 因此，强化扩展私钥没有普通的扩展私钥有用，然而强化扩展私钥会创建一个防火墙，使得多层密钥分散泄露不会发生。因为强化子扩展公钥无法仅仅靠自己生成孙chain code，父扩展公钥的泄露不能和孙私钥的泄露组合创建重孙扩展私钥。
 
