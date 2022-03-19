@@ -184,6 +184,82 @@ point( (child_private_key + i) % p ) == child_public_key + point(i)
 
 是否创建子公钥或者更后代的公钥，对于所有交易来说，使用一个可预测的整数序列不会比使用单一公钥好，因为任何人知道一个子公钥可以找到所有其他的通过这个父公钥分散的子公钥。相反的，使用一个随机种子来确定生成的整数序列，这样没有种子的人无法看到子公钥之间的关系。
 
-HD协议使用一个单一的根种子和无关联的确定代际(**unlinkable deterministically-generated**)的整数来创建子代，孙子代和其他更后代的密钥。每个子密钥也通过它的父代获得一个代际(**deterministically-generated**)种子，成为链代码(**chain code**)，所以一个chain code受到破坏，不会破坏整个序列的层次结构。
+HD协议使用一个单一的根种子和无关联的确定代际(**unlinkable deterministically-generated**)的整数来创建子代，孙子代和其他更后代的密钥。每个子密钥也通过它的父代获得一个代际(**deterministically-generated**)种子，称为链代码(**chain code**)，所以一个chain code受到破坏，不会破坏整个序列的层次结构。
 
 ![img](/assets/blog_image/2022/20220318005-en-hd-overview.svg)
+
+如上图所示，HD密钥分散需要四个输入：
+
+- 父私钥和父公钥，常规的未压缩256 bits的ECDSA密钥；
+- 父chain code是256 bits看起来随机的数据；
+- 索引index是程序指定的32-bit整数。
+
+在上图所示的标准形式中，父chain code、父公钥和索引index被输入到单向哈希HMAC-SHA512中，生成确定代际但是看起来随机(**determistically-generated-but-seemingly-random**)的数据。哈希输出右边的看起来随机(**seemingly-random**)256 bits数据被用来作为新的子chain code。在哈希输入的左边，看起来随机(**seemingly-random**)256 bits被当作一个整数和父私钥或者父公钥组合，来创建子私钥或者子公钥：
+
+```
+child_private_key == (parent_private_key + lefthand_hash_output) % G
+child_public_key == point( (parent_private_key + lefthand_hash_output) % G )
+child_public_key == point(child_private_key) == parent_public_key + point(lefthand_hash_output)
+```
+
+> **可以看出来，父私钥和对应代际的chain code可以算出子私钥，然后用point()和子私钥可以算出子公钥，还可以用子公钥和point(父chain code)算出子公钥，这样也可以在不需要私钥的情况下，只知道某一代际的公钥和对应代际的chain code就可以算出下一代的公钥。**
+
+指定不同的代际索引index，可以使用相同的父密钥分散出不同的无关联的子密钥。子密钥使用子chain code重复密钥分散过程可以生成无关联的孙密钥。
+
+因为创建子密钥需要密钥和chain code两者，密钥和chain code合在一起被称作扩展密钥。一个扩展私钥和对应的扩展公钥具有相同的chain code。 主私钥(最顶层)和主chain code是由随机数生成，如下所示：
+
+![img](/assets/blog_image/2022/20220319001-en-hd-root-keys.svg)
+
+根种子(**root seed**)是由123 bits、256 bits或者512 bits的随机数生成的。这个根种子，最少128 bits是需要用户备份的唯一数据，将来用于通过特定的钱包和设置来分散所有的密钥。
+
+根种子通过哈希来创建512 bits看起来随机的数据，通过这些数据来创建主私钥和主chain code(合在一起称作主扩展密钥)。主公钥通过主私钥使用**point()**计算得出，主公钥和主chain code合在一起称作主扩展公钥。主扩展密钥和其他扩展密钥在功能上等效，只是因为它位于最上层的位置，所以才显得不同。
+
+## 强化密钥 Hardened Keys
+
+强化扩展密钥(**Hardened extended keys**)修复了普通扩展密钥的一个潜在问题。如果攻击者获得了一个普通扩展密钥的父chain code和父公钥，他就可以暴力获得所有的通过这个chain code派生出来的chain code。如果攻击者还获得了一个子私钥、孙子私钥或者更下一代的私钥，他就可以使用chain code生成这个私钥后代所有的私钥了，如下面孙子和重孙子一代所示：
+
+![img](/assets/blog_image/2022/20220319002-en-hd-cross-generational-key-compromise.svg)
+
+更糟糕的是，攻击者可以逆向(reverse)普通的子私钥分散公式，只要从子私钥中减去父chain code就可以恢复父私钥，如上图子代和父代所示。这意味着一个攻击者，只要获得了一个扩展公钥和及其后代的任何私钥，就可以恢复出改公钥的私钥及其分散出的所有密钥。
+
+*因为扩展公钥中有对应层级的chain code，所以可以得到这个公钥后代任意代际的公钥，所以只要获得了这个公钥后代的私钥，就可以算到这个私钥上一代的chain code，然后通过私钥-chain code计算出上一代私钥，最后推算出这个公钥和后代的所有密钥。*
+
+![img](/assets/blog_image/2022/20220319003-en-hd-private-parent-to-private-child.svg)
+
+上面的强化公示将索引index、父chain code和父私钥组合在一起用来创建产生子chain code和子私钥的数据。这个公示让在不知道父私钥的情况下不能创建子公钥。换句话说，父扩展公钥不能创建强化子公钥。
+
+因此，强化扩展私钥没有普通的扩展私钥有用，然而强化扩展私钥会创建一个防火墙，使得多层密钥分散泄露不会发生。因为强化子扩展公钥无法仅仅靠自己生成孙chain code，父扩展公钥的泄露不能和孙私钥的泄露组合创建重孙扩展私钥。
+
+HD协议使用不同的索引index来指示是生成普通还是强化密钥。索引Index从0x00~0x7FFFFFFF将生成普通密钥；索引Index从0x80000000~0xFFFFFFFF将生成强化密钥。为了便于描述，许多开发者使用'(prime symbol)来表示强化密钥，所以第一个普通密钥(0x00)是0，第一个强化密钥(0x80000000)是0'。
+
+(比特币的开发者通常使用ASCII的撇号，而不是使用unicode的prime symbol。)
+
+这个压缩描述进一步结合斜杠和m或者M前缀，指示层次(hierarchy)和密钥类型。m表示私钥，M表示公钥。例如，**m/0'/0/122'**表示主私钥的第1代(index=0)强化子密钥的第1代(index=0)普通子密钥的第123代(index=122)强化子私钥(通过索引index)。
+
+![img](/assets/blog_image/2022/20220319004-en-hd-tree.svg)
+
+遵守BIP32 HD协议的钱包只创建主私钥(m)的强化子密钥来防止子密钥泄露而导致主密钥泄露。因为主密钥不存在普通子密钥，所以主公钥也不会在HD钱包里使用。所有其他密钥可以有普通子密钥，所以可以使用对应的普通扩展公钥。
+
+HD协议还描述了扩展公钥和扩展私钥的序列化格式。详细情况可以参看BIP32协议。
+
+## 保存根种子 Storing Root Seeds
+
+HD协议里的根种子(**root seeds**)是128、256或者512 bits的随机数，这些种子需要备份保存。为了方便，可以使用非数字化备份的方法，比如记忆、手抄等。BIP39定义了一个方法，通过助记符来创建512 bits的根种子。
+
+生成单词数与使用的熵值相关:
+
+|Entropy Bits|Words|
+|-|-|
+|128|12|
+|160|15|
+|192|18|
+|224|21|
+|256|24|
+
+密码短语(**passphrase**)可以是任意长度，它可以简单得追加到助记符pseudo-sentence，mnemonic和password将使用2048次HMAC-SHA512运算，产生一个看起来随机的512 bits种子。
+
+## 松散密钥钱包 Loose-Key Wallets
+
+松散密钥钱包似乎中文也有叫零型非确定钱包，也被称作**Just a Bunch Of Keys(JBOK)**，是一种Bitcoin Core客户端早期的钱包形式，已经被弃用。Bitcoin Core客户端钱包通过伪随机数发生器自动创建100个公私钥对供以后使用。
+
+这些没有使用的私钥存储在一个虚拟的密钥池(**key pool**)中，之前生成的密钥被使用后，就会生成新的密钥放到池中，保证池中有100个未使用的密钥。
