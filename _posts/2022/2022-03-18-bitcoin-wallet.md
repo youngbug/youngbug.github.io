@@ -202,7 +202,7 @@ child_public_key == point( (parent_private_key + lefthand_hash_output) % G )
 child_public_key == point(child_private_key) == parent_public_key + point(lefthand_hash_output)
 ```
 
-> **父chain code、父公钥、索引index计算HMAC-SHA512的过程如下：父公钥(256bits)|子密钥的index(32bits)，拼接，公钥在高位索引在地位，合并后的字节序是大端，对合并后的数据进行HMAC-SHA512运算，父chain code作为哈希密钥。**
+> **父chain code、父公钥、索引index计算HMAC-SHA512的过程如下：父公钥(256bits)和子密钥的index(32bits)进行拼接，公钥在高位索引在地位，合并后的字节序是大端，对合并后的数据进行HMAC-SHA512运算，父chain code作为哈希密钥。**
 
 > **可以看出来，父私钥和对应代际的chain code可以算出子私钥，然后用point()和子私钥可以算出子公钥，还可以用子公钥和point(父chain code)算出子公钥，这样也可以在不需要私钥的情况下，只知道某一代际的公钥和对应代际的chain code就可以算出下一代的公钥。**
 
