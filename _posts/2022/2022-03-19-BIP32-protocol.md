@@ -85,4 +85,8 @@ excerpt_separator:  <!--more-->
 - 4 bytes：版本字节(mainnet:0x0488B21E public, 0x0488ADE4 private; testnet: 0x043587CF public, 0x04358394 private)
 - 1 byte: 深度：0x00是主节点，0x01是第一级分散密钥(level-1 derived keys) $\dots$
 - 4 bytes: 父密钥的指纹(主密钥的值为0x00000000)
-- 4 bytes: 子代号码(child number)。
+- 4 bytes: 子代号码(child number)。This is ser32(i) for i in xi = xpar/i, with xi the key being serialized. (0x00000000 if master key)
+- 32 bytes：chain code
+- 33 bytes：公钥或者私钥数据(公钥$ser_p(K)$,私钥$0x00$&#124;&#124;$ser_{256}(k)$)
+
+这个78字节的结构可以像其他比特币数据一样使用Base58编码
