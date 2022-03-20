@@ -22,8 +22,8 @@ excerpt_separator:  <!--more-->
 
 - 检查 $i \ge i^{31}$(子密钥是否是加强密钥).
     
-    - 如果是(加强密钥): 令$I=HMAC-SHA512(Key=C_{par}, Data=0x00 \big| \big| ser_{256}(k_{par})\big| \big|ser_{32}(i))$。(注意：私钥要填充0x00使长度变为33字节长)
-    - 如果不是(普通密钥):令$I=HMAC-SHA512(Key=C_{par}, Data=ser_p(point(k_{par}))\big| \big|ser_{32}(i))$。
+    - 如果是(加强密钥): 令$I=HMAC-SHA512(Key=C_{par}, Data=0x00$ &#124;&#124; $ser_{256}(k_{par}) $&#124; &#124;$ser_{32}(i))$。(注意：私钥要填充0x00使长度变为33字节长)
+    - 如果不是(普通密钥):令$I=HMAC-SHA512(Key=C_{par}, Data=ser_p(point(k_{par}))$&#124;&#124;$ser_{32}(i))$。
 - 把$I$分割成两个32字节的序列$I_L,I_R$。
 - 返回子密钥$k_i=parse_{256}(I_L)+k_{par} \ (mod \ n)$。
 - 返回 chain code $c_i=I_R$。
@@ -35,7 +35,7 @@ excerpt_separator:  <!--more-->
 
 - 检查 $i \ge 2{31}$(子密钥是是否是加强密钥)。
     - 如果是(加强密钥): 返回失败
-    - 如果不是(普通密钥)：令$I=HMAC-SHA512(Key=c_{par},Data=ser_p(K_{par})\big| \big|ser_{32}(i))$。
+    - 如果不是(普通密钥)：令$I=HMAC-SHA512(Key=c_{par},Data=ser_p(K_{par})$&#124;&#124;$ser_{32}(i))$。
 - 把$I$分割成两个32字节序列$I_L, I_R$.
 - 返回子密钥$K_i = point(parse_{256}(I_L))+K_{par}$。
 - 返回chain code $c_i=I_R$。
@@ -61,4 +61,4 @@ excerpt_separator:  <!--more-->
 
 ### 密钥树 The key tree
 
-下一步就是级联的多个CKD来构造密钥树了。我们从主扩展密钥(master extended key)m这个根开始。
+下一步就是级联的多个CKD来构造密钥树了。我们从主扩展密钥(master extended key)m这个根开始。通过对
