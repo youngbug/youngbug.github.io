@@ -61,4 +61,28 @@ excerpt_separator:  <!--more-->
 
 ### 密钥树 The key tree
 
-下一步就是级联的多个CKD来构造密钥树了。我们从主扩展密钥(master extended key)m这个根开始。通过对
+下一步就是级联的多个CKD来构造密钥树了。我们从主扩展密钥(master extended key)m这个根开始。通过使用多个$i$值对$CKD_{priv(m,i)}$求值，我们可以得到大量一级派生节点(level-1 derived nodes)。这些派生节点也是扩展密钥，可以使用$CKD_{priv}$继续正常进行分散计算。
+
+使用简化符号时，我们把$CKD_{priv}(CDK_{priv}(CKD_{priv}(m,3_H),2),5)$ 写为 $m/3_H/2/5$。公钥也是一样的，我们把$CKD_{pub}(CKD_{pub}(CKD_{pub}(M,3),2),5)$ 写为$M/3/2/5$。这就有了以下的特性：
+
+- $N(m/a/b/c) = N(m/a/b)/c = N(m/a)/b/c = N(m)/a/b/c = M/a/b/c$
+- $N(m/a_H/b/c)=N(m/a_H/b)/c=N(m/a_H)/b/c$
+
+然而$N(m/a_H)$不能再写为$N(m)/a_H$，因为后者不可能。
+
+树上的每个叶子节点都对应一个实际的密钥，同时内部节点对应于从他们派生出来的密钥的集合。叶子节点的chain code被忽略，只有嵌入他们的公私密钥是有意义的。因这种构建，知道了扩展私钥就可以重建所有的后代私钥和公钥，知道一个扩展公钥允许重建所有后代的非强化公钥。
+
+### 密钥标志 Key identifiers
+
+扩展公钥可以通过序列化后的ECDSA公钥K的Hash160(RIPEMD160 after SHA256)来识别，忽略掉chain code。这个与传统比特币地址使用的数据完全一致。不建议使用Base58格式来表示该数据，因为它可能会被当做一个地址(钱包软件接受支付并不需对密钥链的支持)。
+
+密钥标志的前32 bits称作密钥指纹(**key fingerprint**)
+
+### 序列化格式 Serialization format
+
+扩展公钥和私钥使用下面的流程序列化：
+
+- 4 bytes：版本字节(mainnet:0x0488B21E public, 0x0488ADE4 private; testnet: 0x043587CF public, 0x04358394 private)
+- 1 byte: 深度：0x00是主节点，0x01是第一级分散密钥(level-1 derived keys) $\dots$
+- 4 bytes: 父密钥的指纹(主密钥的值为0x00000000)
+- 4 bytes: 子代号码(child number)。
