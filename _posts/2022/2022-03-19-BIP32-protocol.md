@@ -63,7 +63,7 @@ excerpt_separator:  <!--more-->
 
 下一步就是级联的多个CKD来构造密钥树了。我们从主扩展密钥(master extended key)m这个根开始。通过使用多个$i$值对$CKD_{priv(m,i)}$求值，我们可以得到大量一级派生节点(level-1 derived nodes)。这些派生节点也是扩展密钥，可以使用$CKD_{priv}$继续正常进行分散计算。
 
-使用简化符号时，我们把$CKD_{priv}(CDK_{priv}(CKD_{priv}(m,3_H),2),5)$ 写为 $m/3_H/2/5$。公钥也是一样的，我们把$CKD_{pub}(CKD_{pub}(CKD_{pub}(M,3),2),5)$ 写为$M/3/2/5$。这就有了以下的特性：
+使用简化符号时，我们把 $CKD_{priv}(CDK_{priv}(CKD_{priv}(m,3_H),2),5)$ 写为 $m/3_H/2/5$。公钥也是一样的，我们把$CKD_{pub}(CKD_{pub}(CKD_{pub}(M,3),2),5)$ 写为$M/3/2/5$。这就有了以下的特性：
 
 - $N(m/a/b/c) = N(m/a/b)/c = N(m/a)/b/c = N(m)/a/b/c = M/a/b/c$
 - $N(m/a_H/b/c)=N(m/a_H/b)/c=N(m/a_H)/b/c$
@@ -135,4 +135,11 @@ excerpt_separator:  <!--more-->
 
 #### 经常性公对公交易 Recurrent business-to-business transactions: $N(m/i_H/0)$
 
-在两个经营合作伙伴经常转账的情况时，一个可以使用扩展公钥
+在两个经营合作伙伴经常转账的情况时，一方可以使用指定账户($M/i_H/0$)的**外链**的扩展公钥作为一种"超级地址"(“super address”)，可以让频繁的交易不会(不容易)被关联起来，但是不需要每次都为支付比特币请求一个新的地址。这种方案也被矿池用作可变支付地址。
+
+#### 不安全的收款方 Unsecure money receiver: $N(m/i_H/0)$
+
+当一个不安全的web服务器被用来运行一个电子商务站点，它需要知道用来接受付款的公钥地址。web服务器只需要知道单个账户的**外链**扩展公钥。这意味着某人非法的web服务器的访问权最多看到所有的收款支付，但是不能盗走资金，不能(琐碎)区分付款的交易，也不能看到其他web服务器的收款交易，如果有多个的话。
+
+### 兼容性 Compatibility
+
