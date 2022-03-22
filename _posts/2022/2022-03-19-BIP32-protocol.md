@@ -21,6 +21,8 @@ excerpt_separator:  <!--more-->
 - $ser_{p}(P)$: 序列化坐标对P=(x,y)为通过(0x02 or 0x03)&#124; &#124;$ser_{256}(x)$ (开头的字节取决于y坐标的校验)，使用SEC1的压缩的字节序列。
 - $parse_{256}(p)$: 将32字节的序列解析为256bits的数，高位在前。
 
+ <!--more-->
+ 
 ### 扩展密钥 Extended keys
 
 We represent an extended private key as (k, c), with k the normal private key, and c the chain code. An extended public key is represented as (K, c), with K = point(k) and c the chain code.
