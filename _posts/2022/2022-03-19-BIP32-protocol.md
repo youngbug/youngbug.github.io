@@ -63,7 +63,7 @@ excerpt_separator:  <!--more-->
 
 下一步就是级联的多个CKD来构造密钥树了。我们从主扩展密钥(master extended key)m这个根开始。通过使用多个$i$值对$CKD_{priv(m,i)}$求值，我们可以得到大量一级派生节点(level-1 derived nodes)。这些派生节点也是扩展密钥，可以使用$CKD_{priv}$继续正常进行分散计算。
 
-使用简化符号时，我们把 $CKD_{priv}(CDK_{priv}(CKD_{priv}(m,3_H),2),5) 写为 m/3_H/2/5 。公钥也是一样的，我们把CKD_{pub}(CKD_{pub}(CKD_{pub}(M,3),2),5) 写为M/3/2/5$。这就有了以下的特性：
+使用简化符号时，我们把 $ CKD_{priv}(CDK_{priv}(CKD_{priv}(m,3_H),2),5) $ 写为 $ m/3_H/2/5 $ 。公钥也是一样的，我们把$ CKD_{pub}(CKD_{pub}(CKD_{pub}(M,3),2),5) $ 写为 $ M/3/2/5 $。这就有了以下的特性：
 
 - $N(m/a/b/c) = N(m/a/b)/c = N(m/a)/b/c = N(m)/a/b/c = M/a/b/c$
 - $N(m/a_H/b/c)=N(m/a_H/b)/c=N(m/a_H)/b/c$
