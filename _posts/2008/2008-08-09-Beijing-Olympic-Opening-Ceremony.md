@@ -2,7 +2,7 @@
 layout: post
 title: BUPT小松林观看奥运开幕式直播
 author: Zhao Yang(cnrgc@163.com)
-time: 2012年06月15日
+time: 2008年08月09日
 location: 北京
 pulished: true
 category: Volunteer
