@@ -58,9 +58,7 @@ excerpt_separator: <!--more-->
 
 开幕式彩排遇上大暴雨
 
-![img](/assets/blog_image/2008/20080909013-ocd.jpg)
-
-开幕式彩排遇上大暴雨
+<!-- ![img](/assets/blog_image/2008/20080909013-ocd.jpg) -->
 
 ![img](/assets/blog_image/2008/20080909014-ocd.jpg)
 
@@ -68,7 +66,7 @@ excerpt_separator: <!--more-->
 
 ![img](/assets/blog_image/2008/20080909015-ocd.jpg)
 
-![img](/assets/blog_image/2008/20080909016-ocd.jpg)
+<!-- ![img](/assets/blog_image/2008/20080909016-ocd.jpg) -->
 
 ![img](/assets/blog_image/2008/20080909017-ocd.jpg)
 
