@@ -60,6 +60,8 @@ excerpt_separator: <!--more-->
 
 ![img](/assets/blog_image/2008/20080909013-ocd.jpg)
 
+开幕式彩排遇上大暴雨
+
 ![img](/assets/blog_image/2008/20080909014-ocd.jpg)
 
 在公共区时有各种展示和活动，有时候会遇上明星运动员
