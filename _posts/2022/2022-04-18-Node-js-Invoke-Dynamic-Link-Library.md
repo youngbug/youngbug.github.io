@@ -26,6 +26,8 @@ $ git clone https://github.com/youngbug/js-rockeyarm.git
 
 ## 0x02 准备
 
+### 1. 安装依赖模块
+
 首先需要在node.js项目中安装调用动态链接库时需要依赖的模块**ffi-napi,ref-napi,ref-array-napi,ref-struct-napi**。
 
 ``` shell
@@ -45,6 +47,10 @@ npm install struct-napi
 
 - ref-struct-napi: 这个模块在Node.js中提供了一个结构体类型的实现。ROCKEY-ARM的函数很多参数都是结构体指针，如果声明称uchar的数组，那么传出的数据都是uchar数组，解析的时候不方便，需要自己拼接，除了麻烦，还要考虑字节序的问题。如果使用结构体，并定义一个结构体数组来作为指针传入，函数返回的结构体参数，就可以直接用结构体进行解析，会比较方便。
 
+### 2.准备调用的动态库
+
+向[飞天诚信](https://www.ftsafe.com.cn)购买ROCKEY-ARM加密锁产品，可以获得ROCKEY-ARM的SDK，可以获得Windows和Linux的动态链接库，文件名一般为Dongle_d.和libRockeyARM.so.0.3。
+
 ## 0x03 声明函数接口
 
 ffi-napi支持Windows，Linux系统，所以.dll和.so都可以支持，在不同的操作系统下去加载不同的动态库文件就可以了。加载动态库的方法如下:
@@ -56,7 +62,7 @@ libRockey = new ffi_Library('d:/rockey/x64/Dongle_d.dll',rockeyInterface)
 ```
 Library()第一个参数是.dll的路径，Linux系统是.so的路径。第二个参数rockeyInterface是动态库导出函数的声明，ROCKEY-ARM的导出函数比较多，我单独拿出来定义。具体下面会讲到。
 
-### 1 声明几个简单函数
+### 1. 声明几个简单函数
 
 首先从ROCKEY-ARM中找几个参数简单的函数来声明一下。
 
@@ -108,11 +114,11 @@ var ptrHandle = refArray(ryHandle)
 var ptrByte = refArray(ref.types.uchar)
 ```
 
-### 2 void*类型参数
+### 2. void*类型参数
 
 DONGLE_HANDLE本质是void \*类型, void\* 类型最开始的时候妄图定义一个void的数组，然后用void数组来表示void*，然后发现报断言错误，数组不支持void类型。所以就直接用无符号数来表示void指针，在64位系统是8字节，32位系统是4字节，使用uint类型就可以了。DONGLE_HANDLE*。
 
-### 3 结构体数组类型参数
+### 3. 结构体数组类型参数
 
 在ROCKEY-ARM的函数中也有很多带参数的接口，比如：
 
@@ -189,7 +195,7 @@ const rockeyInterface = {
 
 调用ffi-napi声明的函数，主要是给自己定义的数据类型赋初值以及获得自定义参数的返回值。下面分别说明。
 
-### 1 int\*
+### 1. int\*
 
 这里的int*，是让函数返回设备的数量，或者传入输入数据的长度或者传出输出数据的长度，所以只要定义一个长度为1的int数组即可，如下：
 
@@ -199,7 +205,7 @@ const rockeyInterface = {
 ```
 给传入的数据赋值，只要给下标为0的元素赋值即可。
 
-### 2 DONGLE_INFO\*
+### 2. DONGLE_INFO\*
 
 这个参数是枚举函数传出枚举到设备信息的列表，枚举到多少设备，就传出多少个DONGLE_INFO，所以需要传入足够数量的的DONGLE_INFO，如下：
 ``` javascript
@@ -209,7 +215,7 @@ libRockey.Dongle_Enum(DongleList, piCount)
 console.log(DongleList[0].m_PID) //输出枚举到的第一个设备的PID
 ```
 
-### 3 BYTE\*
+### 3. BYTE\*
 
 这个参数一般是作为传入传出数据的缓冲区的，所以创建数组的时候，需要创建足够长的空间，如下：
 
