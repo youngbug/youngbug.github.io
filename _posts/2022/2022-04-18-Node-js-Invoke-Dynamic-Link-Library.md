@@ -185,8 +185,55 @@ const rockeyInterface = {
 
 ## 0x04 调用声明的函数
 
+调用ffi-napi声明的函数，主要是给自己定义的数据类型赋初值以及获得自定义参数的返回值。下面分别说明。
+
+### 1 int\*
+
+这里的int*，是让函数返回设备的数量，或者传入输入数据的长度或者传出输出数据的长度，所以只要定义一个长度为1的int数组即可，如下：
+
+``` javascript
+ var piCount = new ptrInt(1) //
+ piCount[0] = 0
+```
+给传入的数据赋值，只要给下标为0的元素赋值即可。
+
+### 2 DONGLE_INFO\*
+
+这个参数是枚举函数传出枚举到设备信息的列表，枚举到多少设备，就传出多少个DONGLE_INFO，所以需要传入足够数量的的DONGLE_INFO，如下：
+``` javascript
+libRockey.Dongle_Enum(null, piCount)//获得设备的数量
+var DongleList = new ptrDongleInfo(piCount[0])
+libRockey.Dongle_Enum(DongleList, piCount)
+console.log(DongleList[0].m_PID) //输出枚举到的第一个设备的PID
+```
+
+### 3 BYTE\*
+
+这个参数一般是作为传入传出数据的缓冲区的，所以创建数组的时候，需要创建足够长的空间，如下：
+
+``` javascript
+var buffer = new ptrByte(len)
+```
+
 ## 0x05 踩坑总结
 
-### 1 结构体对齐的问题
+开发的过程中，踩到一些坑耽误了不少时间，这里总结一下。
 
-### 2 无符号数和有符号数
+ROCKEY-ARM的结构体是按字节对齐的，ref-struct-napi没有找到设置字节对齐的方法。当时声明的结构体如下：
+
+``` javascript
+var dongleInfo = StructType({
+    m_VerL:     ref.types.uchar,
+    m_VerR:     ref.types.uchar,
+    m_Type:     ref.types.ushort,
+    m_Birthday: ref.types.uint64,
+    m_Agent:    ref.types.uint32,
+    m_PID:      ref.types.uint32,
+    m_UserID:   ref.types.uint32,
+    m_HID:      ref.types.uint64,
+    m_IsMother: ref.types.uint32,
+    m_DevType:  ref.types.uint32
+})
+```
+
+测试的时候会发现定义的结构体和ROCKEY-ARM定义的结构体对齐方式不一样，于是把m_Birthday和m_HID两个成员从ref.types.uint64，拆分成左右两个uint32，这样就可以让结构体对齐方式和ROCKEY-ARM的一致。使用m_Birthday和m_HID的时候，需要讲左右两个uint32拼接一些，稍微麻烦一点，但是在没找到配置StructType对齐方的情况，保证结果正确，还是可以接受的。
