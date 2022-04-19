@@ -74,7 +74,9 @@ DWORD WINAPI Dongle_GenRandom(DONGLE_HANDLE hDongle, int nLen, BYTE * pRandom);
 首先看一下上面几个接口用到的数据类型有:DONGLE_HANDLE,DWORD,DONGLE_HANDLE*,int,BYTE*这几种。
 再看下ffi-napi支持的ref-napi支持的数据类型有以下类型：
 ``` javascript
-void,int64,ushort,int,uint64,float,uint,long,double,int8,ulong,Object,uint8,longlong,CString,int16,char,byte,int32,uchar,size_t,uint32,short
+void,int64,ushort,int,uint64,float,uint,long,
+double,int8,ulong,Object,uint8,longlong,CString,
+int16,char,byte,int32,uchar,size_t,uint32,short
 ```
 
 参数这里应该用长度一致的数据类型，可以有以下匹配。
