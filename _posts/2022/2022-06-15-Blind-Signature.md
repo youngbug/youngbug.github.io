@@ -117,7 +117,7 @@ EXIT:
 
 ## 0x04 总结
 
-RSA盲签名的代码、调用示例程序都已经上传，可以直接检出测试，没有仔细测试验证可能有各种问题，如果遇到问题，可以给我提issues。
+RSA盲签名的代码、调用示例程序都已经上传，可以直接检出测试，没有仔细测试验证可能有各种问题，如果遇到问题，可以给我提[issues](https://github.com/youngbug/blindsignatures_rsa/issues)。
 
 ```bash
 git clone https://github.com/youngbug/blindsignatures_rsa.git
