@@ -6,7 +6,7 @@ author: Zhao Yang(cnrgc@163.com)
 location: 北京
 pulished: true
 category: cryptography
-tags: [law]
+tags: [cryptography]
 excerpt_separator:  <!--more-->
 ---
 
