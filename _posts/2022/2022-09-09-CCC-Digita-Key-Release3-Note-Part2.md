@@ -55,6 +55,7 @@ excerpt_separator:  <!--more-->
 SELECT指令用来选择Digital Key applet实例（使用实例AID）在15.3.2.1定义。
 
 C-APDU: 00 A4 04 00 Lc [Digital_Key_Framework_AID] 00
+
 R-APDU: [表 5-3]90 00 
 
 *表 5-3 SELECT指令响应*
@@ -76,6 +77,7 @@ R-APDU: [表 5-3]90 00
 在这个指令中，车辆应当发送所选择的SPAKE2+版本，所有支持的Digital Key applet协议版本和SPAKE2+的Scrypt参数。车辆应当在响应中获取SPAKE2+协议的曲线点X。SPAKE2+REQUEST指令使用的参数见18节。
 
 C-APDU：80 30 00 00 Lc [表 5-4] 00 
+
 R-APDU：[表 5-5] 90 00
 
 *表5-4 SPAKE2+REQUEST指令*
@@ -103,8 +105,43 @@ R-APDU：[表 5-5] 90 00
 
 车辆也应当发送支持的Digital Key applet 协议版本列表，借此第一个被列出的版本应当被车主设备使用。整个Digital Key applet协议版本列表（Tag 5C）应当被包含在Key Creation Request（见11.8.1，DIGITAL_KEY_APPLET_PROTOCOL_VERSION）。这个允许在分享钥匙到好友设备时选择最好的版本使用。
 
-SPAKE2+协议所有的曲线点的定义遵守X9.63标准，格式为 0x04||\<x\>||\<y\>的字节流，x和y为32字节的大端表示（见18.1）。
+SPAKE2+协议所有的曲线点的定义遵守X9.63标准，格式为 0x04\|\|\<x\>\|\|\<y\>的字节流，x和y为32字节的大端表示（见18.1）。
 
 如果返回的X值在无穷远或者不是一个在椭圆曲线上定义的合法的点，车辆应当中止流程，并发送OP CONTROL FLOW指令，按照5.1.7的描述P2值设置为0C。
 
-Scrypt的迭代次数（cost参数）是一个4字节的无符号整数。
+Scrypt的迭代次数（cost参数）是一个4字节的无符号整数，用来配置Scrypt功能（见18.4）在主机厂服务器和钥匙设备上来派生校验者的值。其他传输的Scrypt参数还有块大小和平行化参数（见18.1.2）。Scrypt cost参数、块大小参数、平行化参数的TLV值部分都是编码为大端格式。
+
+如果车辆没有找到双方支持的SPAKE2+或者Digital Key applet协议版本，车辆应当发送一个OP_FLOW_CONTROL(Owner Paring
+ FLow Control)指令包含表5-24中定义的原因代码，代替SPAKE2+REQUEST指令。
+
+如果SPAKE2+REQUEST指令被成功处理，车辆和钥匙设备应当计算共享密钥K，分别为Listing 18-4和Listing 18-5。
+
+*表5-6 SPAKE2+REQUEST响应错误状态字*
+
+|SW1SW2|描述|
+|-|-|
+|6985|指令使用顺序不对|
+|6A88|收到的数据不合法或者为0|
+|9484|设备配对还未准备就绪|
+
+### 5.1.3 SPAKE2+VERIFY 指令
+
+这个指令相互交换证据来证明双方计算出来的共享密钥是相同的。
+
+C-APDU: 80 32 00 00 Lc [表 5-7] 00
+
+R-APDU: [表 5-8] 90 00 
+
+*表5-7 SPAKE2+VERIFY指令*
+
+|Tag|长度(bytes)|描述|是否强制|
+|-|-|-|-|
+|52|65|SPAKE2+协议的曲线点Y，prepended with 04 h as per Listing 18-2|强制|
+|57|16|车辆证据M[1]|强制|
+
+*表5-8 SPAKE2+VERIFY响应*
+
+|Tag|长度(bytes)|描述|是否强制|
+|-|-|-|-|
+|58|16|钥匙设备证据 M[2]|强制|
+
