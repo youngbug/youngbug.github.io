@@ -44,10 +44,14 @@ excerpt_separator:  <!--more-->
 ### 5.1.1 SELECT指令
 
 汽车向钥匙设备发送SELECT AID指令。Digital Key framework AID为**A000000809434343444B467631**。
+
 当Digital Key framework被选中，设备应当按照表5-3返回数据。
+
 钥匙设备应当向车辆指示当前配对状态，可能状态有：
+
 - 未配对
 - 配对模式开始且配对口令已经输入
+
 SELECT指令用来选择Digital Key applet实例（使用实例AID）在15.3.2.1定义。
 
 C-APDU: 00 A4 04 00 Lc [Digital_Key_Framework_AID] 00
