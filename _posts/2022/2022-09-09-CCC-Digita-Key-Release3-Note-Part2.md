@@ -43,7 +43,7 @@ excerpt_separator:  <!--more-->
 
 ### 5.1.1 SELECT指令
 
-汽车向钥匙设备发送SELECT AID指令。Digital Key framework AID为**A000000809434343444B467631**。
+汽车向钥匙设备发送SELECT AID指令。Digital Key framework AID为 **A000000809434343444B467631**。
 
 当Digital Key framework被选中，设备应当按照表5-3返回数据。
 
@@ -57,7 +57,7 @@ SELECT指令用来选择Digital Key applet实例（使用实例AID）在15.3.2.1
 C-APDU: 00 A4 04 00 Lc [Digital_Key_Framework_AID] 00
 R-APDU: [表 5-3]90 00 
 
-表 5-3 SELECT指令响应
+*表 5-3 SELECT指令响应*
 
 |Tag|长度(bytes)|描述|是否必须|
 |-|-|-|-|
@@ -97,3 +97,14 @@ R-APDU：[表 5-5] 90 00
 |-|-|-|-|
 |50|65|SPAKE2+协议的曲线点X，prepended with 04 h as per Listing 18-3|强制|
 
+在发送SPAKE2+REQUEST指令前，车辆应当先检查SPAKE2+配对计数器。如果计数器指示已经配对7次，车辆应当不再发送配对指令。相反的，车辆应当发送一个OP CONTROL FLOW来中止（超过错误计数器次数、需要新的配对口令或者没有明确原因）。当新的配对口令产生，计数器将被复位。
+
+车辆应当发送所选的2字节的SPAKE2+协议版本。
+
+车辆也应当发送支持的Digital Key applet 协议版本列表，借此第一个被列出的版本应当被车主设备使用。整个Digital Key applet协议版本列表（Tag 5C）应当被包含在Key Creation Request（见11.8.1，DIGITAL_KEY_APPLET_PROTOCOL_VERSION）。这个允许在分享钥匙到好友设备时选择最好的版本使用。
+
+SPAKE2+协议所有的曲线点的定义遵守X9.63标准，格式为 0x04||\<x\>||\<y\>的字节流，x和y为32字节的大端表示（见18.1）。
+
+如果返回的X值在无穷远或者不是一个在椭圆曲线上定义的合法的点，车辆应当中止流程，并发送OP CONTROL FLOW指令，按照5.1.7的描述P2值设置为0C。
+
+Scrypt的迭代次数（cost参数）是一个4字节的无符号整数。
