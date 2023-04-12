@@ -1,6 +1,6 @@
 ---
 layout: post
-title: CCC 数字钥匙Release 3 学习笔记 Part2
+title: CCC 数字钥匙Release 3 学习笔记 车主配对命令 Part2
 time: 2022年9月9日
 author: Zhao Yang(cnrgc@163.com)
 location: 北京
@@ -354,3 +354,18 @@ subjectPublicKey
  }
 ```
 
+### 5.1.5 GET DATA指令
+
+这个指令应当继续使用已经建立的会话密钥去检索所有需要的所有数据，验证Digital Key framework创建在Digital Key applet 实例中的数字钥匙。
+
+C-APDU: 84 CA 00 00 Lc [encrypted_tag] [command_mac] 00
+
+R-APDU: [response_payload] [response_mac] 90 00 or 61XX
+
+每个GET DATA指令一次只能请求一个Tag 。---->这个地方跟EMV或者其他应用一样。
+
+X509证书不应当在封装成TLV结构
+
+### 5.1.6 GET RESPONSE指令
+
+跟ISO 14443规定的一个样，这里就不写了。
