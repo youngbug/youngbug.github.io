@@ -1,6 +1,6 @@
 ---
 layout: post
-title: CCC 数字钥匙Release 3学习笔记 Part2
+title: CCC 数字钥匙Release 3 学习笔记 Part2
 time: 2022年9月9日
 author: Zhao Yang(cnrgc@163.com)
 location: 北京
@@ -9,9 +9,11 @@ category: cryptography
 tags: [cryptography]
 excerpt_separator:  <!--more-->
 ---
+整理了一下CCC组织的汽车数字钥匙Release 3中关于车主配对Owner Paring，过程的APDU指令和数据说明。基本可以算是在车端的角度进行车主配对操作。里面的章节表格编号，都按照CCC数字钥匙Release 3文档中的编号走，方便将来检索对照。
+
 ## 车主配对命令
 
-
+<!--more-->
 
 ### 5.1 车主配对的指令
 
@@ -43,7 +45,7 @@ excerpt_separator:  <!--more-->
 
 ### 5.1.1 SELECT指令
 
-汽车向钥匙设备发送SELECT AID指令。Digital Key framework AID为 **A000000809434343444B467631**。
+汽车向钥匙设备发送SELECT AID指令。Digital Key framework AID为 *A000000809434343444B467631*。
 
 当Digital Key framework被选中，设备应当按照表5-3返回数据。
 
@@ -144,4 +146,211 @@ R-APDU: [表 5-8] 90 00
 |Tag|长度(bytes)|描述|是否强制|
 |-|-|-|-|
 |58|16|钥匙设备证据 M[2]|强制|
+
+在发送SPAKE2+VERIFY指令之前，汽车应当先给SPAKE2+配对尝试计数器加1。
+
+汽车应当计算证据M[1]（描述在Listing 18-7）并发送它给钥匙设备，一起发送的还有曲线点Y。
+
+钥匙设备应当验证下面的内容：
+
+- 1. 收到的曲线点Y是否是定义在椭圆曲线上的合法的点
+- 2. 收到M[1]
+
+如果都验证成功，钥匙设备应当计算证据M[2]（描述Listing 18-8），并在SPAKE2+响应中将M[2]给车辆返回。
+
+只有车辆成功验证了收到的M[2]，车辆才能继续车主配对流程。
+
+如果上面任何验证失败，比如钥匙不能计算M[2]且不能返回M[2]或者返回其他除了状态字之外的响应。这种情况车辆应当发送一个OP_CONTROL_FLOW指令按照5.1.7中的描述将P2设置未09去中止车主配对.
+
+*表5-9 SPAKE2+VERIFY响应状态字*
+
+|SW1SW2|描述|
+|-|-|
+|6985|指令使用顺序不对|
+|6A88|验证证据失败|
+
+SPAKE2+VERIFY步骤引出用于建立钥匙框架和车辆交换后续指令的SCP03通道的安全通道密钥。建立SCP03通道的遵守Listing 18-10和Listing 18-11。创建安全通道的密钥在下列情况应当被复位：
+
+- 在成功配对之后
+- 当钥匙设备响应的状态字不是9000或者6100时
+- SPAKE2+REQUEST指令已经发送
+- 当出现通信中断时
+- 车主配对没有终止，但时间超过最大允许的时间
+
+车辆需要再重新开始SPAKE2+建立新密钥。注意这种情况配对口令还是原来的。车辆应当在7次尝试失败后更换口令。
+
+### 5.1.4 WRITE DATA指令
+
+这个指令向钥匙设备发送生成数字钥匙所需要的所有数据。它也用于提供证明车辆的密钥追踪用途的设备公钥。(好蹩脚，凑合看)
+
+C-APDU: 84 D4 P1 00 Lc [command_data] [command_mac] 00
+R-APDU: [response_mac] 90 00 
+
+除了发最后一次WRITE DATA指令时P1应当设置为80外，其他情况下参数P1和P2永远设置为0。
+
+这个指令只允许在安全通道内发送。
+
+*表5-10 WRITE DATA响应状态字*
+
+|SW1SW2|描述|
+|-|-|
+|6985|指令使用顺序不对|
+|6A84|内存不够|
+
+一个或者多个WRITE DATA指令可以用来向钥匙设备写入请求的数据对象。
+
+*表5-11 数字钥匙创建数据对象*
+
+|Tag|长度(bytes)|数据内容|是否强制|
+|-|-|-|-|
+|7F4A|var|端点创建数据，元素来自表15-13|强制|
+|7F4B|var|车辆公钥证书K，Der编码X509证书，Listing 15-3|强制|
+|7F4C|var|中间证书， Der编码的X509证书|可选|
+|7F4D|var|邮箱映射 表5-13|强制|
+|7F4E|var|设备配置 表5-14|强制|
+|5F5F|0|数字钥匙数据发送完成|强制|
+
+*表5-12 设备数字钥匙证书的对象*
+
+|Tag|长度(bytes)|数据内容|是否强制|
+|-|-|-|-|
+|5F5A|var|车辆对设备的认证公钥（不透明）|可选|
+|5F5F|0|数字钥匙证书发送完成|强制|
+
+表5-11中所有要求的的对象应当按照表格顺序被写入设备。
+
+一个或者多个TLV允许被写在每个WRITE DATA指令中。
+
+TLV 5F5F应当在最后被写入标记数据写入结束。最后一个WRITE DATA指令应当通过设置P1=80指示包含TLV 5F5F。
+
+当车辆已经接受了设备公钥，表5-12中所有要求的对象应当被写入钥匙设备。最后一个WRITE DATA指令应当通过设置P1=80来指示。
+
+5F5F 应当为最后一个被写入的TLV，标记传输数据结束。
+
+Tag 7F4A应当包含表15-13中所有数据元素，除了下面的元素：
+
+- 端点标识符（设备定义）
+- Instance CA标识符 （设备定义）
+- 计数器限制（弃用，不使用）
+
+如果车辆标识符作为7F4A的一部分提供，设备应当比较它的值和车辆公钥叶子证书K的值，如果检查失败车主配对应当中止。
+
+最大指令数据长度应道为239字节：len=[command_data] + [padding] + [command_mac]
+
+len = 239 + 1 + 8 <= 255(ok)
+
+len = 240 + 16 + 8  255(not ok)
+
+[command_data]+[padding]应道是AES分组16字节的整数倍。填充方案描述在9.至少填充1字节的80。最大响应数据长度应当为239字节。
+
+车辆公钥应当以被主机厂CA签发的一个X509证书形式提供，描述在Listing 5-3。
+
+*Listing 5-1 车辆证书扩展方案*
+
+```
+VehicleCertificateExtensionSchema ::= SEQUENCE
+{
+ extension_version INTEGER (1..255)
+}
+```
+
+*Listing 5-2 车辆证书扩展数据*
+
+```
+vehicle-cert-extension-data VehicleCertificateExtensionSchema ::=
+{
+ extension_version 1 --value shall be 1
+}
+```
+
+车辆公钥证书数据描述在Listing 5-3。
+
+*Listing 5-3 车辆公钥证书数据*
+
+```
+vehicle-key-cert-data Certificate ::=
+ {
+ tbsCertificate
+ {
+ version v3, --shall be v3--
+ serialNumber ..., --a random integer chosen by the certificate issuer,
+ Signature
+ {
+ algorithm {1 2 840 10045 4 3 2} --OID for ecdsaWithSHA256 (ANSI X9.62 ECDSA algorithm with SHA-256)
+ },
+ issuer rdnSequence:
+ {
+ {
+ {
+ type {2 5 4 3}, --OID for CommonName
+ value "..." --shall match the subject of the issuing certificate, shall use PrintableString or UTF8String format
+
+ }
+ }
+ },
+ validity
+ {
+ notBefore Time: "..." --shall use UTCTime or GeneralizedTime as defined in [3]
+ notAfter Time: "..." --shall use UTCTime or GeneralizedTime as defined in [3]
+ },
+ subject rdnSequence:
+ {
+ {
+ {
+ type {2 5 4 3}, --OID for CommonName
+ value "Vehicle OEM Identifier" --contains the subject of the certificate, as per Appendix B.2.6
+ shall use PrintableString or UTF8String format
+ }
+ }
+ },
+ subjectPublicKeyInfo
+ {
+ algorithm
+ {
+ algorithm {1 2 840 10045 2 1} --OID for ecPublicKey (ANSI X9.62 public key type)
+ parameters {1 2 840 10045 3 1 7} --OID for prime256v1(ANSI X9.62 named elliptic curve)
+ },
+ subjectPublicKey '04...'H --the public key pre-pended with 04 h to indicate uncompressed format
+ },
+ extensions
+{
+{
+extnID {1.3.6.1.4.1.41577.5.1}, --OID for Vehicle Public Key Certificate (see Appendix B.2.2)
+critical TRUE,
+extnValue ‘…’H --DER encoding for VehicleCertificateExtensionSchema extension as per Listing 5-1
+},
+ {
+ extnID {2 5 29 15}, --KeyUsage standard extension
+ critical TRUE,
+ extnValue '03020780'H --DER encoding for KeyUsage, digitalSignature only
+ },
+ {
+ extnID {2 5 29 19}, --BasicConstraints standard extension
+ critical TRUE,
+ extnValue '3000'H -- DER encoding for cA=FALSE
+ },
+ {
+ extnID {2 5 29 35}, --OID for AuthorityKeyIdentifier standard extension
+ critical FALSE,
+ extnValue '...'H- DER encoding of an AuthorityKeyIdentifier sequence, containing only a KeyIdentifier element.
+ -- The KeyIdentifier is an OCTET STRING containing the 160-bit SHA-1 hash of the value of the BIT STRING
+subjectPublicKey
+ --from the issuer certificate (excluding the tag, length, and number of unused bits)
+ },
+ {
+ extnID {2 5 29 14}, -- OID for SubjectKeyIdentifier standard extension
+ critical FALSE,
+ extnValue ‘…’H --160-bit SHA1 hash of the value of the BIT STRING subjectPublicKey
+--(excluding the tag, length, and number of unused bits)
+}
+ }
+ },
+ signatureAlgorithm
+ {
+ algorithm {1 2 840 10045 4 3 2}
+ },
+ signatureValue '...'H --the certificate signature computed as per [3]
+ --ECDSA signature
+ }
+```
 
