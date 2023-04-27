@@ -30,7 +30,7 @@ Digital Key applet实例应当在车主配对执行之前为可用状态。
 
 - **device.PK/device.SK**: 钥匙设备在数字钥匙创建时产生的长期密钥对。一个钥匙一对。
 
-- **vehicle.PK/vehicle.SK**：车辆产生的密钥对。相同车辆的所有的数字钥匙这个密钥对相同。这个密钥对的声明周期，由主机厂规定，不在CCC数字钥匙规范里规定。
+- **vehicle.PK/vehicle.SK**：车辆产生的密钥对。相同车辆的所有的数字钥匙这个密钥对相同。这个密钥对的生命周期，由主机厂规定，不在CCC数字钥匙规范里规定。
 
 - **配对口令**：输入到钥匙设备的SPAKE2+配对口令。由主机厂账户提供的UTF8编码的8位数字（0-9），用于车主认证。
 
@@ -93,4 +93,26 @@ Instance CA证书由Digital Key framework获得。
 第一个NFC交易协商协议版本（见6.3.3.8），车辆和钥匙设备互相认证，使用SPAKE2+建立安全通道，传输所有钥匙创建数据给钥匙设备，参见图6-3。
 
 ![img](/assets/blog_image/2023/202304120003-figure-6-3.png)
+
+SPAKE2+创建一个对称会话密钥用来在汽车和设备之间建立一个安全通道。
+
+在第二个NFC交易开开始之前，设备创建了设备密钥。
+
+在第二个NFC交易，汽车从设备中读取钥匙创建数据，验证这些数据，如果成功，存储设备公钥。NFC复位在每次交易之后执行。
+
+紧接着的步骤或者事件顺序都是发生在NFC会话中：
+
+#### 6.3.3.1 步骤1：选择Digital Key Framework
+
+当设备和汽车的NFC读卡器通信时，汽车应当使用选择指令通过AID选中Digital Key Framework。如果车俩选择Digital Key Applet AID在选择Digital Key framework AID之前，设备应当对选择Digital Key Applet的指令响应状态字6A82。设备应当通过选择AID的响应返回给汽车所有支持的SPAKE2+版本和所有Digital Key applet协议版本。决定双方用哪个版本的SPAKE2+（用来创建安全通道）和使用哪个版本的Digital Key applet协议（用于钥匙分享）。
+
+选择应用指令定义在 5.1.1
+
+#### 6.3.3.2 步骤2和2a：SPAKE2+ 交易
+
+汽车应当选择并发送给设备要使用的SPAKE2+协议版本和支持的Digital Key applet协议版本列表。
+
+SPAKE2+交易在[10]描述。
+
+![img](/assets/blog_image/2023/202304120004-figure-6-4.png)
 
