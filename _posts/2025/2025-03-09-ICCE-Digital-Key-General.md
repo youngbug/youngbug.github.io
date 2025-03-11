@@ -21,7 +21,7 @@ CCC联盟的参与单位主要是国际上的汽车主机厂、零部件供应�
 
 ICCE的数字钥匙是无需额外的实体钥匙，将车钥匙功能集成在移动终端设备中，基于SE，TEE等安全功能，使用NFC、蓝牙、UWB等技术连接手机和车，实现车辆开门、启动等功能。ICCE数字钥匙规范定义的，数字钥匙是在移动设备中的，但是因为规范支持手机NFC+SE的认证方案，所以如果主机厂采用卡片形式的数字钥匙，直接找个卡商开发符合规范的JavaCard Applet，直接发行卡片数字车钥匙，也是可行的，而且可能是最简单，成本最低的钥匙方案。
 
-ICCE数字钥匙规范目前有一下几部分
+ICCE数字钥匙规范目前有以下几部分
 |规范名称|说明|
 |-|-|
 |第1部分 总体规范|主要介绍了车端和移动端的方案，Applet的APDU指令|
@@ -108,30 +108,7 @@ NFC认证是，用户主动拿钥匙/手机靠近车辆，通过钥匙靠近不�
 
 #### 密钥认证过程
 
-```mermaid
-sequenceDiagram
-    participant Card
-    participant Reader
-    
-    Card->>Reader: 1: Select Command Request
-    Reader-->>Card: 2: Select Command Response
-
-    Card->>Reader: 3: GetProcessData Command Request
-
-    
-    Card-->>Reader: 4: GetProcessData Command Response
-
-    Reader->>Card: 5: Auth Command Request
-
-    Card-->>Reader: 6: Auth Command Response
-
-    Reader->>Card: 7: ReadBinary Command Request (0)
-    Card-->>Reader: 8: ReadBinary Command Response (0)
-    
-    Reader->>Card: 9: UpdateBinary Command Request (0)
-    Card-->>Reader: 10: UpdateBinary Command Response (0)
-
-```
+![img](/assets/blog_image/2025/202503090003-figure-3.png)
 密钥认证的过程，就是最常见的对称密钥挑战应答方案，钥匙端和车端共享一个对称密钥，然后使用一个随机数作为挑战码，让对方使用共享的密钥计算应答，然后挑战一方使用共享的密钥验证应答值，做双向认证。按规范要求至少应该完成双向认证，也就是上图的第6步，后续读取二进制可选，根据需求来做。密钥认证的逻辑上NFC、无感认证、遥控认证流程是通用的。
 
 ### 钥匙分享
