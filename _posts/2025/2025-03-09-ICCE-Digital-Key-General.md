@@ -106,4 +106,53 @@ ICCE数字车钥匙规范中，对SE的要求为：具备安全存储、硬件�
 ### NFC认证
 NFC认证是，用户主动拿钥匙/手机靠近车辆，通过钥匙靠近不同区域的读卡器，触发不同的车控指令，比如在车门车窗触发车门解锁等，由于NFC通信方式是即时的，这里不需要进行会话维持操作，车端只需要对密钥认证通过，然后按照每个读卡器对应的不同的车控指令即可。
 
+### 密钥认证过程
+
+```mermaid
+sequenceDiagram
+    participant Card
+    participant Reader
+    
+    Card->>Reader: 1: Select Command Request
+    Reader-->>Card: 2: Select Command Response
+
+    Card->>Reader: 3: GetProcessData Command Request
+
+    
+    Card-->>Reader: 4: GetProcessData Command Response
+
+    Reader->>Card: 5: Auth Command Request
+
+    Card-->>Reader: 6: Auth Command Response
+
+    Reader->>Card: 7: ReadBinary Command Request (0)
+    Card-->>Reader: 8: ReadBinary Command Response (0)
+    
+    Reader->>Card: 9: UpdateBinary Command Request (0)
+    Card-->>Reader: 10: UpdateBinary Command Response (0)
+
+```
+密钥认证的过程，就是最常见的对称密钥挑战应答方案，钥匙端和车端共享一个对称密钥，然后使用一个随机数作为挑战码，让对方使用共享的密钥计算应答，然后挑战一方使用共享的密钥验证应答值，做双向认证。按规范要求至少应该完成双向认证，也就是上图的第6步，后续读取二进制可选，根据需求来做。密钥认证的逻辑上NFC、无感认证、遥控认证流程是通用的。
+
 ## 钥匙分享
+钥匙分享分为车主分享模式和借车人申请模式，总的流程都是借车人或者车主通过App提交申请，由主机厂后台审核后，生成数字钥匙并下发到车机和借车人手机。主要的业务流程还是需要结合具体的应用场景确定。
+
+# 0x04 接口
+规范中对接口的定义主要说的是Applet的COS接口，主要内容为APDU介绍。通过系统架构图可以看出来，数字钥匙方案里钥匙端有一个Applet，车端有一个Applet。看了以下这些指令基本和7816-4/EMV/PBOC/PK卡的指令类似，就不详细介绍了，简单说下功能。
+
+钥匙端的Applet一般需要实现以下功能：Select/GetProcessData/Auth/ReadBinary/UpdateBinary/Encrypt/Decrypt。
+
+车端的Applet一般要实现以下功能：Select/IntAuth/ExternalAuth/Decrypt。
+
+# 0x05 商用密码要求
+
+规范中并没有要求数字钥匙方案中使用的密码算法必须使用国产密码算法，标准只规定了分组密码算法需要使用不低于SM4/AES128的算法强度，加密模式推荐CBC/CTR/GCM模式；公钥密码算法应使用不地区SM2/ECC256/RSA2048/ECDSA256强度的算法；密钥协商算法强度不应低于SM2/ECDH
+256;杂凑算法强度应当不低于SM3/SHA-256；TLS应使用不低于TLSv1.2以上版本。
+
+随机数发生器，要求ECU所用的SE应满足GM/T 0005或者NIST SP800-22要求的随机数发生器，一般实践中会直接要硬件密码模块的商密检测认证中心或者FIPS的检测认证证书。
+
+密钥生成需要使用获得安全认证的SE进行密钥生成/存储/调用。
+
+密钥的的更新需要按照GP Card Specification进行安全更新。
+
+车端的根密钥在生产阶段进行个人化时，应当保证密钥传输与写入的完整性与机密性。
