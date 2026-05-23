@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Ed25519数字签名算法
+title: Ed25519签名算法：原理、应用与车联网场景浅析
 time: 2025年6月7日
 author: Zhao Yang(cnrgc@163.com)
 location: 北京
